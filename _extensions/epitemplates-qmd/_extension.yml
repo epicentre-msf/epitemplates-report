@@ -1,0 +1,31 @@
+title: Epitemplates-qmd
+version: 1.0.0
+quarto-required: ">=1.4.0"
+contributes:
+  format:
+    html:
+      theme: 
+        - cosmo
+        - epicentre_qmd_style.scss
+      title-block-banner: true
+      embed-resources: true
+      smooth-scroll: true
+      code-fold: show
+      code-tools: true
+      toc: true
+      toc-location: left
+      toc-float: true
+      toc-collapsed: true
+      callout-appearance: minimal
+    revealjs:
+      logo: img/epicentre_logo.png
+      incremental: false
+      slide-number: c/t
+      overview: true
+      progress: true
+      title-slide-attributes: 
+        data-background-image: img/title-bg.png
+        data-background-size: contain
+    pptx:
+      incremental: true
+      reference-doc: pptx-template/epicentre-pptx-template.pptx
