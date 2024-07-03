@@ -3,8 +3,8 @@ title: Epitemplates-qmd HTML
 subtitle: EpiDS team - Epicentre, Paris
 footer: Epicentre - Médecins Sans Frontières
 format: 
-  epitemplates-qmd-html: default
-author: 
+  epitemplates-report-docx: default
+author:
   - name: Author 1
     email: email.author.1@epicentre.msf.org
   - name: Author 2
