@@ -36,7 +36,7 @@ The template provides different formats, presented bellow.
 
 **`epitemplates-report-docx`: word document**
 
-![word screenshot](screenshots/word_document.png)
+![word screenshot](screenshots/docx_document.png)
 
 **`epitemplates-report-pptx`: powerpoint presentation**
 
