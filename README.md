@@ -2,12 +2,18 @@
 
 EpiDS templates for quarto documents and presentations in mutiple formats
 
-### Installation and usage
+## Installation and usage
 
 To use this custom format, first install the extension at the root directory of your project:
 
 ```bash
 quarto add epicentre-msf/epitemplates-report
+```
+
+Or install in your directory
+
+```bash
+quarto use template epicentre-msf/epitemplates-report
 ```
 
 And add the format to your YAML configuration, along with other HTML format options if needed:
@@ -22,7 +28,7 @@ format:
 Alternatively, you can also use the [epitemplates](https://github.com/epicentre-msf/epitemplates) R package from within R/Rstudio.
 The template provides different formats, presented bellow.
 
-### Formats
+## Formats
 
 <div align="center">
 

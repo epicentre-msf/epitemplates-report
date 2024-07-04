@@ -1,5 +1,5 @@
 ---
-title: Epitemplates-qmd HTML
+title: "Document title"
 subtitle: EpiDS team - Epicentre, Paris
 footer: Epicentre - Médecins Sans Frontières
 format: 
