@@ -23,6 +23,7 @@ contributes:
       slide-number: c/t
       overview: true
       progress: true
+      embed-resources: true
       title-slide-attributes: 
         data-background-image: img/title-bg.png
         data-background-size: contain
