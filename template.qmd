@@ -3,7 +3,7 @@ title: "Document title"
 subtitle: EpiDS team - Epicentre, Paris
 footer: Epicentre - Médecins Sans Frontières
 format: 
-  epitemplates-report-docx: default
+  epitemplates-report-html: default
 author:
   - name: Author 1
     email: email.author.1@epicentre.msf.org
