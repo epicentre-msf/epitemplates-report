@@ -18,14 +18,13 @@ comments:
 
 ```{r setup}
 #| include: false
-#| eval: false
 
-library(fs)         # work with path
-library(here)       # create relative paths
-library(rio)        # import files
-library(janitor)    # data cleaning
-library(lubridate)  # date handling
-library(tidyverse)  # data science 
+# library(fs)         # work with path
+# library(here)       # create relative paths
+# library(rio)        # import files
+# library(janitor)    # data cleaning
+# library(lubridate)  # date handling
+# library(tidyverse)  # data science 
 ```
 
 # Primary title
