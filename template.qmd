@@ -18,6 +18,7 @@ comments:
 
 ```{r setup}
 #| include: false
+#| eval: false
 
 library(fs)         # work with path
 library(here)       # create relative paths
