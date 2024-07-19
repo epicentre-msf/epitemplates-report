@@ -25,6 +25,7 @@ comments:
 # library(janitor)    # data cleaning
 # library(lubridate)  # date handling
 # library(tidyverse)  # data science 
+
 ```
 
 # Primary title
@@ -63,3 +64,47 @@ execute:
   echo: false 
 ---
 ```
+
+# Add value box with `bslib`
+
+:::{.column-page}
+
+::: {.grid}
+
+::: {.g-col-4}
+```{r, echo = FALSE}
+bslib::value_box(
+  title = "Total Screenings",
+  value = scales::number(100000, na.rm = TRUE),
+  showcase = bsicons::bs_icon("card-checklist"),
+  theme = "primary"
+)
+
+```
+:::
+
+::: {.g-col-4}
+```{r, echo = FALSE}
+bslib::value_box(
+  title = "Total Enrolments",
+  value = scales::number(120333, na.rm = TRUE),
+  showcase = bsicons::bs_icon("person-add"),
+  theme = "primary"
+)
+```
+:::
+
+::: {.g-col-4}
+```{r, echo = FALSE}
+bslib::value_box(
+  title = "Total Month 2 Visits",
+  value = scales::number(300000, na.rm = TRUE),
+  showcase = bsicons::bs_icon("box-arrow-right"),
+  theme = "primary"
+)
+```
+:::
+
+:::
+
+:::

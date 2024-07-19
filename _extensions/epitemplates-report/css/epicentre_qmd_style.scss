@@ -29,11 +29,6 @@ $tabset-border-color: $col-primary;
 /*layout */
 $presentation-title-slide-text-align: left;
 
-/* Table of content */ 
-$toc-color: $col-primary;
-$toc-inactive-color: $col-light-grey;
-$content-padding-top: 1px;
-
 /* titles font size and weight*/
 $h1-font-size: 30px;
 $h1-font-weight: 400;
@@ -47,14 +42,20 @@ $h3-font-weight: 300;
 $h4-font-size: 23px; 
 $h4-font-weight: 300;
 
-/* font-weights */
+/* Table of content */
+$toc-color: $col-primary;
+$toc-inactive-color: $col-light-grey;
+$content-padding-top: 1px;
 
+/* Table of content book */
+$sidebar-item-color:red;
+
+/* font-weights */
 $weight-title: 600;
 
 $navbar-bg: $col-secondary-bg;
 
 /* inline code */
-
 $code-bg: $col-primary-light;
 $code-color: $col-primary; 
 
@@ -105,11 +106,12 @@ p.subtitle {
 /* Inline code */
 code {
   border-radius: 5px;
+  color:$col-primary;
 }
 
 /* Inline code */
 .quarto-title-block .quarto-title-banner {
-  background-image: url(img/epi_msf_logo.png);
+  background-image: url(img/epicentre_msf_logo_transparent.png);
   background-size: 250px;
   background-position: left;
   background-repeat: no-repeat;
@@ -125,7 +127,6 @@ code {
 }
 
 /* call outs style */ 
-
 div.callout-note.callout{
   border-left-color: $col-primary;
   background-color: $col-secondary-bg;
@@ -144,8 +145,7 @@ div.callout-important.callout{
   border-radius: 10px;
 }
 
-/* TOC styling */ 
-
+/* TOC styling */
 h2#toc-title{
   font-weight: 700;
 }
@@ -161,6 +161,46 @@ h2#toc-title{
   font-weight: 700;
 }
 
+/* book */
+.sidebar-title {
+  font-weight: 700;
+  color: $col-primary;
+}
+
+.sidebar-item-text:hover, .sidebar-item-text:focus, .sidebar-item-text.sidebar-link.active {
+  background-color: $col-secondary-bg;
+  color:$col-primary;
+  font-weight: 700;
+}
+
 .reveal .slide-background-content {
   background-image: linear-gradient(#80b882, #37578b) !important;
 }
+
+/* nice hyperlinks */
+p>a {
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 400;
+  color: $col-primary;
+  position: relative;
+}
+
+p>a::after {
+  text-decoration: none;
+  content: "";
+  background: $col-yellow-sec;
+  width: 105%;
+  position: absolute;
+  bottom: .5px;
+  height: 5px;
+  left: -2px;
+  right: 0;
+  z-index: -1;
+  transition: all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+p>a:hover::after {
+  height: calc(100%)
+}
+
