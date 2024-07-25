@@ -10,6 +10,8 @@ $col-red-prim : #C0392B;
 $col-red-sec : #F9EBEA;
 $col-yellow-prim : #FAB872;
 $col-yellow-sec : #FEF6E7;
+$col-green-prim : #588157;
+$col-green-sec : #e9f5eb;
 $body-bg: white;
 
 /* Presentation Font size and color */
@@ -142,6 +144,12 @@ div.callout-caution.callout{
 div.callout-important.callout{
   border-left-color: $col-red-prim;
   background-color: $col-red-sec;
+  border-radius: 10px;
+}
+
+div.callout-tip.callout{
+  border-left-color: $col-green-prim;
+  background-color: $col-green-sec;
   border-radius: 10px;
 }
 
