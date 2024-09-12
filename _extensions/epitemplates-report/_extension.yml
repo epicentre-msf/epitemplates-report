@@ -8,10 +8,13 @@ contributes:
         - cosmo
         - css/epicentre_qmd_style.scss
       title-block-banner: true
+      template-partials: 
+        - partials/title-block.html
+      logo1: img/epicentre_msf_logo_transparent.png
       embed-resources: true
       smooth-scroll: true
       code-fold: show
-      code-tools: true
+      code-tools: false
       toc: true
       toc-location: left
       toc-float: true
