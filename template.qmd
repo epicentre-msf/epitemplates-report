@@ -1,6 +1,6 @@
 ---
 title: "Document title"
-subtitle: EpiDS team - Epicentre, Paris
+subtitle: Epi-DS team - Epicentre, Paris
 footer: Epicentre - Médecins Sans Frontières
 format: 
   epitemplates-report-html: default
@@ -71,7 +71,7 @@ execute:
 
 ::: {.grid}
 
-::: {.g-col-4}
+::: {.g-col-12 .g-col-md-4}
 ```{r, echo = FALSE}
 bslib::value_box(
   title = "Total Screenings",
@@ -83,7 +83,7 @@ bslib::value_box(
 ```
 :::
 
-::: {.g-col-4}
+::: {.g-col-12 .g-col-md-4}
 ```{r, echo = FALSE}
 bslib::value_box(
   title = "Total Enrolments",
@@ -94,7 +94,7 @@ bslib::value_box(
 ```
 :::
 
-::: {.g-col-4}
+::: {.g-col-12 .g-col-md-4}
 ```{r, echo = FALSE}
 bslib::value_box(
   title = "Total Month 2 Visits",

@@ -23,6 +23,8 @@ format:
     epicentre-report-html:
         toc: true
         toc-depth: 3
+        logo1: img/epicentre_msf_logo_transparent.png # top left of header
+        logo2: img/another_logo.png # top right of header
 ```
 
 Alternatively, you can also use the [epitemplates](https://github.com/epicentre-msf/epitemplates) R package from within R/Rstudio.
