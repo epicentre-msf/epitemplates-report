@@ -1,17 +1,22 @@
 ---
 title: "Document title"
-subtitle: Epi-DS team - Epicentre, Paris
+subtitle: "
+This is a space dedicated to the sub-title/Abstract to the report
+<br/>
+"
 footer: Epicentre - Médecins Sans Frontières
 format: 
-  epitemplates-report-html: default
+  epitemplates-report-html: 
+    logo1: img/epicentre_msf_logo_transparent.png
+    logo2: img/bnitm_logo.png
 author:
   - name: Author 1
     email: email.author.1@epicentre.msf.org
   - name: Author 2
     email: email.author.2@epicentre.msf.org
+github-repo: "https://github.com/epicentre-msf" 
 date: last-modified
 date-format: long
-toc: true
 comments:
   hypothesis: true
 ---
@@ -28,7 +33,19 @@ comments:
 
 ```
 
-# Primary title
+# primary 
+
+## secondary 
+
+### tertiary
+
+#### Quatery
+
+
+
+
+
+# Formatting
 
 1. *Italic* and **Bold** will turn out like this
 
@@ -38,7 +55,9 @@ comments:
 
 4. You can also annotate and comment the text. This requires an account on [Hypothes.is](https://web.hypothes.is/)
 
-## Secondary title
+5. [This is how an hyperlink renders](https://epicentre-msf.github.io/gallery/)
+
+## Callouts
 
 ::: {.callout-note}
 **This is a Note** using `{.callout-note}`
@@ -54,7 +73,11 @@ comments:
 
 > This is a `blockquote` made using `>` 
 
-### Tertiary title
+::: {.cell .page-columns .page-full .column-screen .grey-section}
+You can also add a grey section on full page using: `{.cell .page-columns .page-full .column-screen .grey-section}`
+:::
+
+### Global options
 
 ```{yaml}
 #| eval: false
@@ -65,7 +88,25 @@ execute:
 ---
 ```
 
-# Add value box with `bslib`
+
+### Panels 
+
+You can put several graphs next to one another with `{.panel-tabset .nav-pills}`
+
+::: {.panel-tabset .nav-pills}
+## Panel 1
+
+Here goes one thing
+
+## Panel 2
+
+and here a second 
+
+:::
+
+### Value boxes 
+
+You can add some pretty useful value boxes with `{bslib}`
 
 :::{.column-page}
 

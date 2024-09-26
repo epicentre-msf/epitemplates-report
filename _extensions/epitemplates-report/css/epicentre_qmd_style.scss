@@ -67,31 +67,94 @@ $code-block-border-color: $col-primary;
 
 /*-- scss:rules --*/
 
-h1, h2, h3 {
-  color: $col-primary;
+body {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-size: 16px;
 }
 
+/* ------------------------------------------- Text ----------------- */
+p {
+  line-height: 28px;
+}
+p:not(:first-child) {
+  margin-top: 12px;
+}
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+code {
+  border-radius: 5px;
+  color:$col-primary;
+}
+
+/* ------------------------------------------- Titles ----------------- */
+
 h1.title {
-  font-size: 50px;
+  font-size: 65px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: $col-primary;
+  margin-bottom: 100px;
+}
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 60px;
+  }
 }
 
 h1 {
-    font-weight: $h1-font-weight;
+  margin-top: 95px;
+  margin-block-start: 20px;
+  font-size: 45px;
+  font-weight: $h1-font-weight;
+  letter-spacing: -0.02em;
+  color: $col-primary;
+}
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 2.8rem;
+  }
 }
 
 h2 {
-    font-weight: $h2-font-weight;
+  margin-top: 190px !important;
+  margin-block-start: 20px;
+  border-bottom: 0.1px solid rgb(232, 232, 232);
+  padding-bottom: 0.5rem;
+  font-size: 1.875rem;
+  font-weight: $h2-font-weight;
+  color: $col-primary;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+h2:first-of-type {
+  margin-top: 0;
 }
 
 h3 {
-    font-weight: $h3-font-weight;
+  margin-top: 2rem;
+  margin-block-start: 20px;
+  font-size: 1.5rem;
+  font-weight: $h3-font-weight;
+  color: $col-primary;
+  letter-spacing: -0.02em;
 }
 
-h4{
-    font-weight: $h4-font-weight;
+h4 {
+  margin-top: 2rem;
+  margin-block-start: 20px;
+  font-size: 1.5rem;
+  font-weight: $h4-font-weight;
+  color: $col-primary;
+  letter-spacing: -0.02em;
 }
+
+/* ------------------------------------------- Header parts ----------------- */
 
 p.subtitle {
   font-style: italic;
@@ -102,37 +165,16 @@ p.subtitle {
   margin-bottom: 0;
 }
 
-/* BLOCKQUOTE */
+
+
+/* ------------------------------------------- Callouts ----------------- */
+
 .blockquote {
   font-size: 1em;
   color: $col-primary;
   border-left-color: $col-primary;
 }
 
-/* Inline code */
-code {
-  border-radius: 5px;
-  color:$col-primary;
-}
-
-/* Inline code */
-.quarto-title-block .quarto-title-banner {
-  background-image: url(img/epicentre_msf_logo_transparent.png);
-  background-size: 250px;
-  background-position: left;
-  background-repeat: no-repeat;
-  padding-left: 50px;
-  padding-right: 50px;
-  background-origin: content-box;
-}
-
-/* Customize code block and output */
-.code {
-  
-  border-radius: 1px;
-}
-
-/* call outs style */ 
 div.callout-note.callout{
   border-left-color: $col-primary;
   background-color: $col-secondary-bg;
@@ -157,7 +199,21 @@ div.callout-tip.callout{
   border-radius: 10px;
 }
 
-/* TOC styling */
+
+/* ------------------------------------------- TOC ----------------- */
+
+// .sidebar nav[role="doc-toc"] ul > li > a.active,
+// .sidebar nav[role="doc-toc"] ul > li > ul > li > a.active {
+//   border-left: 1px solid var(--primary-color);
+//   color: var(--primary-color) !important;
+// }
+
+// #TOC {
+//   top: 100%;
+//   position: relative;
+//   transform: translate(0, -50%);
+// }
+
 h2#toc-title{
   font-weight: 700;
 }
@@ -173,7 +229,7 @@ h2#toc-title{
   font-weight: 700;
 }
 
-/* book */
+/* Relevant for book */
 .sidebar-title {
   font-weight: 700;
   color: $col-primary;
@@ -185,11 +241,7 @@ h2#toc-title{
   font-weight: 700;
 }
 
-.reveal .slide-background-content {
-  background-image: linear-gradient(#80b882, #37578b) !important;
-}
-
-/* nice hyperlinks */
+/* ------------------------------------------- Hyperlinks ----------------- */
 p>a {
   text-decoration: none;
   cursor: pointer;
@@ -201,7 +253,7 @@ p>a {
 p>a::after {
   text-decoration: none;
   content: "";
-  background: $col-yellow-sec;
+  background: $col-green-sec;
   width: 105%;
   position: absolute;
   bottom: .5px;
@@ -216,3 +268,54 @@ p>a:hover::after {
   height: calc(100%)
 }
 
+/* ------------------------------------------- Buttons used for tabs ----------------- */
+.nav-pills .nav-link {
+  color: $col-primary;
+  background-color: white;
+  border-color: $col-primary;
+  border-radius: 4px;
+}
+.nav-pills .nav-link.active {
+  color: white;
+  background-color: $col-primary;
+}
+.nav-pills .nav-link {
+  padding: 5px;
+  margin-right: 4px;
+}
+ul.nav.nav-tabs {
+  margin: 0px;
+  border: none;
+}
+.tab-content {
+  border: none;
+  margin-top: 10px;
+  padding: 0px;
+}
+
+/* ------------------------------------------- Horizontal separator ----------------- */
+hr {
+  margin-top: 23px;
+  margin-bottom: 23px;
+  border: 0;
+  border-top: 1px solid black;
+  width: 0;
+  animation: separator-width 2s ease-in-out forwards;
+}
+@keyframes separator-width {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 300px;
+  }
+}
+
+/* ------------------------------------------- Grey sections ----------------- */
+.grey-section {
+  background-color: #f8f9fa;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
