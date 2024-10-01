@@ -21,6 +21,8 @@ comments:
   hypothesis: true
 ---
 
+# primary 
+
 ```{r setup}
 #| include: false
 
@@ -33,17 +35,12 @@ comments:
 
 ```
 
-# primary 
 
 ## secondary 
 
 ### tertiary
 
 #### Quatery
-
-
-
-
 
 # Formatting
 
