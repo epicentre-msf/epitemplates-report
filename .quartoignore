@@ -4,3 +4,4 @@ DESCRPTION
 .github/
 .gitignore
 screenshots/
+*.Rproj
