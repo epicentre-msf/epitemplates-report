@@ -4,7 +4,12 @@ EpiDS templates for quarto documents and presentations in mutiple formats
 
 ## Installation and usage
 
-To use this custom format, first install the extension at the root directory of your project:
+This project is distributed as a **Quarto template**, not a standalone extension.
+
+It includes a complete project scaffold (e.g. `.img/`, template file, etc.),
+which **cannot be installed via `quarto add`**.
+
+To create a new report using this template:
 
 ```bash
 quarto use template epicentre-msf/epitemplates-report
