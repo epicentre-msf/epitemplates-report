@@ -19,7 +19,7 @@ And add the format to your YAML configuration, along with other HTML format opti
 
 ```yaml
 format:
-    epicentre-report-html:
+    epitemplates-report-html:
         toc: true
         toc-depth: 3
         logo1: img/epicentre_msf_logo_transparent.png # top left of header
