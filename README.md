@@ -7,12 +7,6 @@ EpiDS templates for quarto documents and presentations in mutiple formats
 To use this custom format, first install the extension at the root directory of your project:
 
 ```bash
-quarto add epicentre-msf/epitemplates-report
-```
-
-Or install in your directory
-
-```bash
 quarto use template epicentre-msf/epitemplates-report
 ```
 
