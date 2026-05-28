@@ -1,0 +1,62 @@
+name: Render template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto (with TinyTeX for PDF)
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: true
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install R packages used by template.qmd
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::bslib
+            any::bsicons
+            any::scales
+
+      - name: Render HTML
+        run: quarto render template.qmd --to epitemplates-report-html
+
+      - name: Render PDF
+        run: quarto render template.qmd --to epitemplates-report-pdf
+
+      - name: Render DOCX
+        run: quarto render template.qmd --to epitemplates-report-docx
+
+      - name: Render PPTX
+        run: quarto render template.qmd --to epitemplates-report-pptx
+
+      - name: Render RevealJS
+        run: quarto render template.qmd --to epitemplates-report-revealjs
+
+      - name: Upload rendered artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-template
+          path: |
+            template.html
+            template.pdf
+            template.docx
+            template.pptx
+          if-no-files-found: ignore
+          retention-days: 7

@@ -21,15 +21,12 @@ contributes:
       toc-collapsed: true
       callout-appearance: minimal
     revealjs:
-      logo: img/epicentre_logo.png
+      logo: img/epicentre_msf_logo_transparent.png
       incremental: false
       slide-number: c/t
       overview: true
       progress: true
       embed-resources: true
-      title-slide-attributes: 
-        data-background-image: img/title-bg.png
-        data-background-size: contain
     pptx:
       incremental: true
       reference-doc: pptx/epicentre-pptx-template.pptx

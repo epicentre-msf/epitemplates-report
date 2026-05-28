@@ -1,7 +1,8 @@
-examples
-LICENCE
-DESCRPTION
 .github/
 .gitignore
+.gitattributes
 screenshots/
 *.Rproj
+LICENSE
+CHANGELOG.md
+README.md
