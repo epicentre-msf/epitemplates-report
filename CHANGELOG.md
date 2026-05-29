@@ -35,6 +35,11 @@ RevealJS) for Epicentre / EpiDS reports.
 - `README.md` typos: `mutiple` → `multiple`, `.img/` → `img/`, and
   alt-text `word screenshot` → `powerpoint screenshot` / `revealjs
   screenshot` on the pptx and revealjs entries.
+- `template.qmd` value-box chunks now guard on
+  `knitr::is_html_output()` so PDF / DOCX / PPTX builds no longer
+  fail with "Functions that produce HTML output found in document
+  targeting pdf output". Value boxes still render in HTML and
+  RevealJS; non-HTML formats cleanly omit them.
 
 ### Removed
 - Revealjs `title-slide-attributes:` block (referenced the nonexistent
