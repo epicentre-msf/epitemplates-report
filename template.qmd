@@ -2,8 +2,15 @@
 title: "Document title"
 subtitle: Epi-DS team - Epicentre, Paris
 footer: Epicentre - Médecins Sans Frontières
-format: 
+format:
   epitemplates-report-html: default
+  epitemplates-report-pdf:
+    prefer-html: true
+  epitemplates-report-docx:
+    prefer-html: true
+  epitemplates-report-pptx:
+    prefer-html: true
+  epitemplates-report-revealjs: default
 author:
   - name: Author 1
     email: email.author.1@epicentre.msf.org
@@ -12,7 +19,6 @@ author:
 date: last-modified
 date-format: long
 toc: true
-prefer-html: true
 comments:
   hypothesis: true
 ---
