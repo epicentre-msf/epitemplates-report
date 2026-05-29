@@ -54,9 +54,10 @@ The extension exposes five Quarto formats. Use any of these names under the
 
 ## Logo overrides
 
-Every format exposes a way to swap the bundled Epicentre / EpiDS
-logos for your own. Paths are always resolved **relative to the
-consumer project root**, by convention an `img/` folder:
+Every format gives you a way to swap the bundled Epicentre / EpiDS
+logos for your own. Paths are always resolved **relative to your
+project's root**, so by convention you keep them in an `img/`
+folder:
 
 ```
 your-project/
@@ -96,12 +97,13 @@ is unset by default.
 ### PDF — same `logo:`, optional `pdf-logo-width:`
 
 The PDF format reads the same top-level `logo:` YAML key as HTML and
-RevealJS. A small Lua filter
-(`scripts/inject-pdf-logo.lua`, bundled with the extension) reads
-the value and injects `\def\pdflogo{...}` into the LaTeX preamble
-before `pdf/header.tex` runs its `\providecommand` defaults, so the
-consumer's `logo:` wins. The page-header logo width defaults to
-`5cm`; override with the optional `pdf-logo-width:` key:
+RevealJS, so a single `logo:` value covers all three. Behind the
+scenes a small Lua filter (`scripts/inject-pdf-logo.lua`, bundled
+with the extension) picks up your `logo:` value and injects
+`\def\pdflogo{...}` into the LaTeX preamble before
+`pdf/header.tex` runs its `\providecommand` defaults — so your
+value wins. The page-header logo width defaults to `5cm`; override
+it with the optional `pdf-logo-width:` key:
 
 ```yaml
 logo: img/partner_logo.png
