@@ -30,6 +30,19 @@ RevealJS) for Epicentre / EpiDS reports.
   entries removed; `LICENSE`, `CHANGELOG.md`, `README.md`,
   `.gitattributes` added so the dev metadata does not ship to
   consumers via `quarto use template`).
+- HTML title-block: dropped `title-block-banner: true` from the
+  format defaults. The custom `partials/title-block.html` is now
+  the sole source of the title-block layout — no more banner /
+  partial overlap.
+- PDF format: page-header logo is now overridable. The bundled
+  default lives behind `\providecommand{\pdflogo}` /
+  `\providecommand{\pdflogowidth}` in `pdf/header.tex`, so
+  consumers override via `header-includes:` (see README).
+- SCSS palette now lives in a single
+  `_extensions/epitemplates-report/css/_brand.scss` partial,
+  imported (`@import "brand";`) by both
+  `epicentre_qmd_style.scss` and `epicentre_revealjs_style.scss`.
+  Brand-refresh = edit `_brand.scss` only.
 - SCSS cleanup in `_extensions/epitemplates-report/css/`:
   - `$sidebar-item-color` now points at `$col-primary` (was a
     leftover debug `red`).
@@ -67,3 +80,6 @@ RevealJS) for Epicentre / EpiDS reports.
 - Duplicate `.reveal .slide-background-content` rule from
   `epicentre_qmd_style.scss` (kept only in the revealjs SCSS where
   it actually applies).
+- `.quarto-title-block .quarto-title-banner` SCSS rule (its job was
+  to patch the layout overlap caused by `title-block-banner: true`
+  coexisting with the custom partial; both gone).

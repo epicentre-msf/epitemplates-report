@@ -52,17 +52,11 @@ The extension exposes five Quarto formats. Use any of these names under the
   - `tidyverse`, `rio`, `janitor`, `fs`, `here`, `lubridate` — optional,
     only needed if you adapt the demo data-processing chunks
 
-## Logo paths
+## Logo overrides
 
-The HTML format accepts two header logos via YAML:
-
-- `logo1` — top-left of the header banner
-- `logo2` — top-right of the header banner
-
-Both paths are resolved **relative to the consumer project root** (the
-directory that contains your `.qmd` file), not relative to the extension
-directory. Place your logos somewhere your project can see them — by
-convention, in an `img/` folder at the project root:
+Every format exposes a way to swap the bundled Epicentre / EpiDS
+logos for your own. Paths are always resolved **relative to the
+consumer project root**, by convention an `img/` folder:
 
 ```
 your-project/
@@ -70,11 +64,53 @@ your-project/
 ├── report.qmd
 └── img/
     ├── epicentre_msf_logo_transparent.png   # bundled default
-    └── partner_logo.png                     # your logo2 override
+    └── partner_logo.png                     # your override
+```
+
+### HTML — `logo1` / `logo2`
+
+The HTML format accepts two header logos via YAML:
+
+- `logo1` — top-left of the header
+- `logo2` — top-right of the header
+
+```yaml
+format:
+  epitemplates-report-html:
+    logo1: img/epicentre_msf_logo_transparent.png
+    logo2: img/partner_logo.png
 ```
 
 The bundled default for `logo1` is
-`img/epicentre_msf_logo_transparent.png`, shipped with the template.
+`img/epicentre_msf_logo_transparent.png`; `logo2` is unset by default.
+
+### RevealJS — `logo`
+
+RevealJS uses Quarto's built-in `logo:` field. The template ships
+`img/epicentre_msf_logo_transparent.png` as the default; override
+in your YAML:
+
+```yaml
+format:
+  epitemplates-report-revealjs:
+    logo: img/partner_logo.png
+```
+
+### PDF — `\pdflogo` / `\pdflogowidth`
+
+The PDF format reads two LaTeX macros for the page-header logo:
+`\pdflogo` (path) and `\pdflogowidth` (width, default `5cm`). The
+extension provides defaults via `\providecommand`, so consumers
+override by `\def`-ing the macros in `header-includes` (which is
+processed before the extension's header):
+
+```yaml
+format:
+  epitemplates-report-pdf:
+    header-includes:
+      - \def\pdflogo{img/partner_logo.png}
+      - \def\pdflogowidth{4cm}
+```
 
 ## Formats
 

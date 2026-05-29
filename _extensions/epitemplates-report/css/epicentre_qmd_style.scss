@@ -1,19 +1,6 @@
 /*-- scss:defaults --*/
 
-$col-primary: #2E4473;
-$col-primary-light: #E4EDF3;
-$col-secondary: #A1B8CF;
-$col-secondary-bg: #F5F9FB;
-$col-dark-grey: #C5C5C5;
-$col-light-grey: #F8F8F8;
-$col-subtitle: #464646; /* precomputed = darken($col-dark-grey, 50%) */
-$col-red-prim: #C0392B;
-$col-red-sec: #F9EBEA;
-$col-yellow-prim: #FAB872;
-$col-yellow-sec: #FEF6E7;
-$col-green-prim: #588157;
-$col-green-sec: #e9f5eb;
-$body-bg: white;
+@import "brand";
 
 /* Presentation Font size and color */
 $presentation-font-size-root: 35px;
@@ -68,8 +55,6 @@ $code-block-border-color: $col-primary;
 
 /* Title block (HTML) */
 $title-block-font-size: 50px;
-$banner-logo-size: 250px;
-$banner-padding-x: 50px;
 
 /* Link underline animation */
 $link-underline-width: 105%;
@@ -125,17 +110,6 @@ p.subtitle {
 code {
   border-radius: 5px;
   color: $col-primary;
-}
-
-/* Title banner */
-.quarto-title-block .quarto-title-banner {
-  background-image: url(img/epicentre_msf_logo_transparent.png);
-  background-size: $banner-logo-size;
-  background-position: left;
-  background-repeat: no-repeat;
-  padding-left: $banner-padding-x;
-  padding-right: $banner-padding-x;
-  background-origin: content-box;
 }
 
 /* Customize code block and output */

@@ -4,11 +4,10 @@ quarto-required: ">=1.4.0"
 contributes:
   format:
     html:
-      theme: 
+      theme:
         - cosmo
         - css/epicentre_qmd_style.scss
-      title-block-banner: true
-      template-partials: 
+      template-partials:
         - partials/title-block.html
       logo1: img/epicentre_msf_logo_transparent.png
       embed-resources: true

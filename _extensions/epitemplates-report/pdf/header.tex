@@ -54,4 +54,18 @@ innerbottommargin=5pt]{impbox}
 \begin{impbox}}
 {\end{impbox}}
 
-\cohead[{\includegraphics[width=5cm]{img/epicentre_msf_logo.png}}]{}
+% Page-header logo. Override the path or the width per-document by
+% adding to your YAML front matter:
+%
+%   format:
+%     epitemplates-report-pdf:
+%       header-includes:
+%         - \def\pdflogo{img/your-logo.png}
+%         - \def\pdflogowidth{4cm}
+%
+% header-includes is processed BEFORE this file, so \providecommand
+% becomes a no-op when the user has already \def'd the macro.
+\providecommand{\pdflogo}{img/epicentre_msf_logo.png}
+\providecommand{\pdflogowidth}{5cm}
+
+\cohead[{\includegraphics[width=\pdflogowidth]{\pdflogo}}]{}

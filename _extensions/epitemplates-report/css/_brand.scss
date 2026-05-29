@@ -1,0 +1,19 @@
+/* Shared brand palette for epitemplates-report.
+   Edit this file to refresh the brand colours; both
+   epicentre_qmd_style.scss and epicentre_revealjs_style.scss
+   import these defaults via `@import "brand";`. */
+
+$col-primary: #2E4473;
+$col-primary-light: #E4EDF3;
+$col-secondary: #A1B8CF;
+$col-secondary-bg: #F5F9FB;
+$col-dark-grey: #C5C5C5;
+$col-light-grey: #F8F8F8;
+$col-subtitle: #464646; /* precomputed = darken($col-dark-grey, 50%) */
+$col-red-prim: #C0392B;
+$col-red-sec: #F9EBEA;
+$col-yellow-prim: #FAB872;
+$col-yellow-sec: #FEF6E7;
+$col-green-prim: #588157;
+$col-green-sec: #e9f5eb;
+$body-bg: white;

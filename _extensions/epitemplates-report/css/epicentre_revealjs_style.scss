@@ -1,16 +1,6 @@
 /*-- scss:defaults --*/
 
-$col-primary: #2E4473;
-$col-primary-light: #E4EDF3;
-$col-secondary: #A1B8CF;
-$col-secondary-bg: #F5F9FB;
-$col-dark-grey: #C5C5C5;
-$col-light-grey: #F8F8F8;
-$col-red-prim: #C0392B;
-$col-red-sec: #F9EBEA;
-$col-yellow-prim: #FAB872;
-$col-yellow-sec: #FEF6E7;
-$body-bg: white;
+@import "brand";
 
 /* Slide-background gradient stops */
 $col-bg-gradient-start: #80b882;
