@@ -22,7 +22,7 @@ format:
     epitemplates-report-html:
         toc: true
         toc-depth: 3
-        logo1: img/epicentre_msf_logo_transparent.png # top left of header
+        logo: img/epicentre_msf_logo_transparent.png # top left of header
         logo2: img/another_logo.png # top right of header
 ```
 
@@ -67,34 +67,31 @@ your-project/
     └── partner_logo.png                     # your override
 ```
 
-### HTML — `logo1` / `logo2`
+### HTML and RevealJS — `logo` (+ `logo2` for HTML only)
 
-The HTML format accepts two header logos via YAML:
+Both HTML and RevealJS read the same `logo:` YAML key (RevealJS via
+Quarto's built-in field; HTML via the custom title-block partial),
+so a single value works across both formats. The HTML format also
+accepts an optional second logo `logo2:` for the top-right corner
+of the header.
 
-- `logo1` — top-left of the header
-- `logo2` — top-right of the header
+- `logo`  — primary logo (HTML: top-left of the header; RevealJS:
+  slide overlay, per Quarto's default behaviour)
+- `logo2` — secondary logo, top-right of the HTML header
+  (HTML only; ignored by RevealJS)
 
 ```yaml
 format:
   epitemplates-report-html:
-    logo1: img/epicentre_msf_logo_transparent.png
+    logo: img/epicentre_msf_logo_transparent.png
     logo2: img/partner_logo.png
-```
-
-The bundled default for `logo1` is
-`img/epicentre_msf_logo_transparent.png`; `logo2` is unset by default.
-
-### RevealJS — `logo`
-
-RevealJS uses Quarto's built-in `logo:` field. The template ships
-`img/epicentre_msf_logo_transparent.png` as the default; override
-in your YAML:
-
-```yaml
-format:
   epitemplates-report-revealjs:
-    logo: img/partner_logo.png
+    logo: img/epicentre_msf_logo_transparent.png
 ```
+
+The bundled default for `logo` is
+`img/epicentre_msf_logo_transparent.png` in both formats; `logo2`
+is unset by default.
 
 ### PDF — `\pdflogo` / `\pdflogowidth`
 

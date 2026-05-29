@@ -34,6 +34,11 @@ RevealJS) for Epicentre / EpiDS reports.
   format defaults. The custom `partials/title-block.html` is now
   the sole source of the title-block layout — no more banner /
   partial overlap.
+- **Breaking:** HTML primary logo is now `logo:` instead of
+  `logo1:`, matching the YAML key RevealJS already uses (Quarto
+  built-in). A single `logo:` value now works across HTML and
+  RevealJS. The secondary right-side HTML logo stays `logo2:`.
+  Consumers using `logo1:` need to rename it to `logo:`.
 - PDF format: page-header logo is now overridable. The bundled
   default lives behind `\providecommand{\pdflogo}` /
   `\providecommand{\pdflogowidth}` in `pdf/header.tex`, so

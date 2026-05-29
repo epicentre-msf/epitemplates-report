@@ -9,7 +9,7 @@ contributes:
         - css/epicentre_qmd_style.scss
       template-partials:
         - partials/title-block.html
-      logo1: img/epicentre_msf_logo_transparent.png
+      logo: img/epicentre_msf_logo_transparent.png
       embed-resources: true
       smooth-scroll: true
       code-fold: show
