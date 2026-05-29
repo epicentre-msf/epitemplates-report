@@ -1,0 +1,68 @@
+name: Release on tag
+
+# Trigger: pushing any `v*` tag (e.g. v1.0.0, v1.0.0-rc1) creates
+# a matching GitHub Release whose body is the CHANGELOG.md section
+# for that version. Tags with a hyphen suffix (`-rc1`, `-beta.2`,
+# …) are flagged as pre-releases.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Extract CHANGELOG section for this tag
+        id: notes
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Tag: $GITHUB_REF_NAME"
+          echo "Looking for CHANGELOG section: [$VERSION]"
+
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" { capture = 1; next }
+            /^## \[/ && capture       { exit }
+            capture                   { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if [ ! -s release-notes.md ]; then
+            echo "::error::No CHANGELOG.md section found for [$VERSION]. Add a '## [$VERSION]' heading before tagging."
+            exit 1
+          fi
+
+          echo "--- release notes ---"
+          cat release-notes.md
+          echo "--- end ---"
+
+          # Tags with a hyphen suffix (v1.0.0-rc1, v1.0.0-beta.2, ...)
+          # are marked as pre-releases.
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ARGS=(
+            "$GITHUB_REF_NAME"
+            --title "$GITHUB_REF_NAME"
+            --notes-file release-notes.md
+          )
+          if [ "${{ steps.notes.outputs.prerelease }}" = "true" ]; then
+            ARGS+=(--prerelease)
+          fi
+          gh release create "${ARGS[@]}"
