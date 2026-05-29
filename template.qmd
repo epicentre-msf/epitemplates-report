@@ -12,6 +12,7 @@ author:
 date: last-modified
 date-format: long
 toc: true
+prefer-html: true
 comments:
   hypothesis: true
 ---
