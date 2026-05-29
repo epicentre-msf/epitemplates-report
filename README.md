@@ -93,13 +93,26 @@ The bundled default for `logo` is
 `img/epicentre_msf_logo_transparent.png` in both formats; `logo2`
 is unset by default.
 
-### PDF — `\pdflogo` / `\pdflogowidth`
+### PDF — same `logo:`, optional `pdf-logo-width:`
 
-The PDF format reads two LaTeX macros for the page-header logo:
-`\pdflogo` (path) and `\pdflogowidth` (width, default `5cm`). The
-extension provides defaults via `\providecommand`, so consumers
-override by `\def`-ing the macros in `header-includes` (which is
-processed before the extension's header):
+The PDF format reads the same top-level `logo:` YAML key as HTML and
+RevealJS. A small Lua filter
+(`scripts/inject-pdf-logo.lua`, bundled with the extension) reads
+the value and injects `\def\pdflogo{...}` into the LaTeX preamble
+before `pdf/header.tex` runs its `\providecommand` defaults, so the
+consumer's `logo:` wins. The page-header logo width defaults to
+`5cm`; override with the optional `pdf-logo-width:` key:
+
+```yaml
+logo: img/partner_logo.png
+pdf-logo-width: 4cm  # optional, default 5cm
+
+format:
+  epitemplates-report-pdf: default
+```
+
+If you'd rather skip the YAML key, the original macro-override
+pattern still works for advanced users:
 
 ```yaml
 format:

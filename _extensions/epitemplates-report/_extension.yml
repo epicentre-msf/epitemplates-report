@@ -35,5 +35,7 @@ contributes:
       include-in-header:
         - pdf/header.tex
       classoption: oneside
+      filters:
+        - scripts/inject-pdf-logo.lua
     docx:
       reference-doc: docx/reference.docx 

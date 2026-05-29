@@ -39,6 +39,13 @@ RevealJS) for Epicentre / EpiDS reports.
   built-in). A single `logo:` value now works across HTML and
   RevealJS. The secondary right-side HTML logo stays `logo2:`.
   Consumers using `logo1:` need to rename it to `logo:`.
+- PDF page-header logo now also reads the top-level `logo:` YAML
+  key (via the new
+  `_extensions/epitemplates-report/scripts/inject-pdf-logo.lua`
+  filter), so a single `logo:` covers all three formats. An
+  optional `pdf-logo-width:` key controls the width (default
+  `5cm`). The original `\def\pdflogo` / `\def\pdflogowidth` in
+  `header-includes:` continues to work for advanced overrides.
 - PDF format: page-header logo is now overridable. The bundled
   default lives behind `\providecommand{\pdflogo}` /
   `\providecommand{\pdflogowidth}` in `pdf/header.tex`, so
