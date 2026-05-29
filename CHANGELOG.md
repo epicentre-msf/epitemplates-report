@@ -30,6 +30,24 @@ RevealJS) for Epicentre / EpiDS reports.
   entries removed; `LICENSE`, `CHANGELOG.md`, `README.md`,
   `.gitattributes` added so the dev metadata does not ship to
   consumers via `quarto use template`).
+- SCSS cleanup in `_extensions/epitemplates-report/css/`:
+  - `$sidebar-item-color` now points at `$col-primary` (was a
+    leftover debug `red`).
+  - Removed the deprecated global `darken()` call; subtitle colour
+    is now exposed as `$col-subtitle: #464646` (precomputed
+    equivalent), so no more Dart Sass deprecation warnings.
+  - Extracted magic numbers in the title block, banner, and
+    hyperlink-underline animation into named SCSS variables
+    (`$title-block-font-size`, `$banner-logo-size`,
+    `$banner-padding-x`, `$link-underline-*`).
+  - Revealjs slide-background gradient stops moved out of the rule
+    into `$col-bg-gradient-start` / `$col-bg-gradient-end`
+    variables (visual unchanged).
+  - The `.important` callout selector is now scoped to
+    `.reveal .important` to avoid colliding with Bootstrap /
+    other themes' `.important` rules.
+  - Variable declarations normalised: no spaces before colons,
+    consistent 2-space indentation throughout.
 
 ### Fixed
 - `README.md` typos: `mutiple` → `multiple`, `.img/` → `img/`, and
@@ -46,3 +64,6 @@ RevealJS) for Epicentre / EpiDS reports.
   `img/title-bg.png`).
 - Committed iCloud placeholder `img/.title-bg.png.icloud`.
 - Tracked `.Rhistory` (now gitignored).
+- Duplicate `.reveal .slide-background-content` rule from
+  `epicentre_qmd_style.scss` (kept only in the revealjs SCSS where
+  it actually applies).

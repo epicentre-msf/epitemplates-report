@@ -6,43 +6,49 @@ $col-secondary: #A1B8CF;
 $col-secondary-bg: #F5F9FB;
 $col-dark-grey: #C5C5C5;
 $col-light-grey: #F8F8F8;
-$col-red-prim : #C0392B;
-$col-red-sec : #F9EBEA;
-$col-yellow-prim : #FAB872;
-$col-yellow-sec : #FEF6E7;
+$col-red-prim: #C0392B;
+$col-red-sec: #F9EBEA;
+$col-yellow-prim: #FAB872;
+$col-yellow-sec: #FEF6E7;
 $body-bg: white;
 
-/* Font size and color */ 
+/* Slide-background gradient stops */
+$col-bg-gradient-start: #80b882;
+$col-bg-gradient-end: #37578b;
+
+/* Font size and color */
 $presentation-font-size-root: 35px;
 $presentation-font-smaller: 0.8;
 
 $presentation-h1-font-size: 80px;
 $presentation-h2-font-size: 65px;
-$presentation-h3-font-size: 40px; 
-$presentation-h4-font-size: 40px; 
+$presentation-h3-font-size: 40px;
+$presentation-h4-font-size: 40px;
 
-$presentation-heading-color: $col-primary; 
+$presentation-heading-color: $col-primary;
 
-/* code blocks*/
+/* code blocks */
 $code-block-bg: $col-secondary-bg;
 $code-block-border-color: $col-primary;
 $code-block-font-size: 0.55em;
 
 /* inline code */
 $code-bg: $col-secondary-bg;
-$code-color: $col-primary; 
+$code-color: $col-primary;
 
-/* tabsets */ 
-$tabset-border-color:$col-primary;
+/* tabsets */
+$tabset-border-color: $col-primary;
 
-/*layout */
-
-$presentation-title-slide-text-align: left ; 
+/* layout */
+$presentation-title-slide-text-align: left;
 
 /*-- scss:rules --*/
 
 .reveal .slide-background-content {
-    background-image: linear-gradient(#80b882, #37578b) !important;
+  background-image: linear-gradient(
+    $col-bg-gradient-start,
+    $col-bg-gradient-end
+  ) !important;
 }
 
 p.subtitle {
@@ -53,6 +59,7 @@ p.subtitle {
 .quarto-title-affiliation {
   font-style: italic;
 }
+
 /* BLOCKQUOTE */
 .blockquote {
   font-size: 1em;
@@ -65,19 +72,19 @@ code {
   border-radius: 5px;
 }
 
-/* Important call out */ 
-.important {
+/* Important call-out box (scoped to .reveal slides to avoid colliding
+   with Bootstrap / theme-defined .important selectors). */
+.reveal .important {
   background-color: $col-red-sec;
   border-left: 6px solid $col-red-prim;
-  /*border: 1px solid #da222200;*/
   border-radius: 4px;
-  padding: 10px 10px 10px 10px;
-  margin: 10px 0px 10px 0px;
+  padding: 10px;
+  margin: 10px 0;
   position: relative;
   width: fit-content;
 }
 
-.important p {
+.reveal .important p {
   width: fit-content;
   margin: 0;
 }

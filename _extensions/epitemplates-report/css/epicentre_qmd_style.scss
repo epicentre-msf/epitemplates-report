@@ -6,12 +6,13 @@ $col-secondary: #A1B8CF;
 $col-secondary-bg: #F5F9FB;
 $col-dark-grey: #C5C5C5;
 $col-light-grey: #F8F8F8;
-$col-red-prim : #C0392B;
-$col-red-sec : #F9EBEA;
-$col-yellow-prim : #FAB872;
-$col-yellow-sec : #FEF6E7;
-$col-green-prim : #588157;
-$col-green-sec : #e9f5eb;
+$col-subtitle: #464646; /* precomputed = darken($col-dark-grey, 50%) */
+$col-red-prim: #C0392B;
+$col-red-sec: #F9EBEA;
+$col-yellow-prim: #FAB872;
+$col-yellow-sec: #FEF6E7;
+$col-green-prim: #588157;
+$col-green-sec: #e9f5eb;
 $body-bg: white;
 
 /* Presentation Font size and color */
@@ -28,20 +29,20 @@ $presentation-heading-color: $col-primary;
 /* tabsets */
 $tabset-border-color: $col-primary;
 
-/*layout */
+/* layout */
 $presentation-title-slide-text-align: left;
 
-/* titles font size and weight*/
+/* titles font size and weight */
 $h1-font-size: 30px;
 $h1-font-weight: 400;
 
-$h2-font-size: 27px; 
+$h2-font-size: 27px;
 $h2-font-weight: 300;
 
-$h3-font-size: 25px; 
+$h3-font-size: 25px;
 $h3-font-weight: 300;
 
-$h4-font-size: 23px; 
+$h4-font-size: 23px;
 $h4-font-weight: 300;
 
 /* Table of content */
@@ -50,7 +51,7 @@ $toc-inactive-color: $col-light-grey;
 $content-padding-top: 1px;
 
 /* Table of content book */
-$sidebar-item-color:red;
+$sidebar-item-color: $col-primary;
 
 /* font-weights */
 $weight-title: 600;
@@ -59,11 +60,22 @@ $navbar-bg: $col-secondary-bg;
 
 /* inline code */
 $code-bg: $col-primary-light;
-$code-color: $col-primary; 
+$code-color: $col-primary;
 
 /* code blocks*/
 $code-block-bg: $col-secondary-bg;
 $code-block-border-color: $col-primary;
+
+/* Title block (HTML) */
+$title-block-font-size: 50px;
+$banner-logo-size: 250px;
+$banner-padding-x: 50px;
+
+/* Link underline animation */
+$link-underline-width: 105%;
+$link-underline-height: 5px;
+$link-underline-bottom: 0.5px;
+$link-underline-left: -2px;
 
 /*-- scss:rules --*/
 
@@ -72,30 +84,30 @@ h1, h2, h3 {
 }
 
 h1.title {
-  font-size: 50px;
-  font-weight: 600;
+  font-size: $title-block-font-size;
+  font-weight: $weight-title;
   color: $col-primary;
 }
 
 h1 {
-    font-weight: $h1-font-weight;
+  font-weight: $h1-font-weight;
 }
 
 h2 {
-    font-weight: $h2-font-weight;
+  font-weight: $h2-font-weight;
 }
 
 h3 {
-    font-weight: $h3-font-weight;
+  font-weight: $h3-font-weight;
 }
 
-h4{
-    font-weight: $h4-font-weight;
+h4 {
+  font-weight: $h4-font-weight;
 }
 
 p.subtitle {
   font-style: italic;
-  color: darken($col-dark-grey, 50%);
+  color: $col-subtitle;
 }
 
 .author {
@@ -112,58 +124,57 @@ p.subtitle {
 /* Inline code */
 code {
   border-radius: 5px;
-  color:$col-primary;
+  color: $col-primary;
 }
 
-/* Inline code */
+/* Title banner */
 .quarto-title-block .quarto-title-banner {
   background-image: url(img/epicentre_msf_logo_transparent.png);
-  background-size: 250px;
+  background-size: $banner-logo-size;
   background-position: left;
   background-repeat: no-repeat;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: $banner-padding-x;
+  padding-right: $banner-padding-x;
   background-origin: content-box;
 }
 
 /* Customize code block and output */
 .code {
-  
   border-radius: 1px;
 }
 
-/* call outs style */ 
-div.callout-note.callout{
+/* Callout styles */
+div.callout-note.callout {
   border-left-color: $col-primary;
   background-color: $col-secondary-bg;
   border-radius: 10px;
 }
 
-div.callout-caution.callout{
+div.callout-caution.callout {
   border-left-color: $col-yellow-prim;
   background-color: $col-yellow-sec;
   border-radius: 10px;
 }
 
-div.callout-important.callout{
+div.callout-important.callout {
   border-left-color: $col-red-prim;
   background-color: $col-red-sec;
   border-radius: 10px;
 }
 
-div.callout-tip.callout{
+div.callout-tip.callout {
   border-left-color: $col-green-prim;
   background-color: $col-green-sec;
   border-radius: 10px;
 }
 
 /* TOC styling */
-h2#toc-title{
+h2#toc-title {
   font-weight: 700;
 }
 
 .nav-link {
-  border-left-color: $col-primary ;
+  border-left-color: $col-primary;
   border-left-width: thick;
   border-radius: 3px;
 }
@@ -181,15 +192,11 @@ h2#toc-title{
 
 .sidebar-item-text:hover, .sidebar-item-text:focus, .sidebar-item-text.sidebar-link.active {
   background-color: $col-secondary-bg;
-  color:$col-primary;
+  color: $col-primary;
   font-weight: 700;
 }
 
-.reveal .slide-background-content {
-  background-image: linear-gradient(#80b882, #37578b) !important;
-}
-
-/* nice hyperlinks */
+/* Hyperlink underline animation */
 p>a {
   text-decoration: none;
   cursor: pointer;
@@ -202,17 +209,16 @@ p>a::after {
   text-decoration: none;
   content: "";
   background: $col-yellow-sec;
-  width: 105%;
+  width: $link-underline-width;
   position: absolute;
-  bottom: .5px;
-  height: 5px;
-  left: -2px;
+  bottom: $link-underline-bottom;
+  height: $link-underline-height;
+  left: $link-underline-left;
   right: 0;
   z-index: -1;
   transition: all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
 p>a:hover::after {
-  height: calc(100%)
+  height: calc(100%);
 }
-
