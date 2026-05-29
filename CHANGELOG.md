@@ -14,6 +14,22 @@ RevealJS) for Epicentre / EpiDS reports.
 ### Added
 - MIT `LICENSE`.
 - `CHANGELOG.md`.
+- Logo-validation Lua filter
+  (`_extensions/epitemplates-report/scripts/validate-logo.lua`)
+  wired into html, revealjs, and pdf. `logo:` / `logo2:` must be
+  local file paths; URL schemes (`javascript:`, `data:`, `http:`,
+  `file:`, …) are rejected. `pdf-logo-width:` must be a LaTeX
+  dimension. Values that arrive as Pandoc `RawInline (tex)` /
+  `RawInline (html)` — the standard LaTeX/HTML injection bypass
+  — are rejected outright before they reach the rendered output.
+- `referrerpolicy="no-referrer"` on the two header `<img>` tags
+  in `partials/title-block.html`, so a maliciously-pointed
+  external `logo:` cannot leak the report's URL to the host it
+  references.
+- Branded Quarto callout colours in `pdf/header.tex`
+  (`\definecolor{quarto-callout-note-color}` and the four other
+  flavours), so PDF callouts pick up the same primary / yellow /
+  red / green palette as the HTML SCSS.
 - "Available formats", "Requirements", and "Logo paths" sections in
   `README.md`.
 - GitHub Actions workflow (`.github/workflows/render.yml`) that renders
@@ -46,6 +62,10 @@ RevealJS) for Epicentre / EpiDS reports.
   optional `pdf-logo-width:` key controls the width (default
   `5cm`). The original `\def\pdflogo` / `\def\pdflogowidth` in
   `header-includes:` continues to work for advanced overrides.
+- PDF format now pins `documentclass: scrartcl` so the bundled
+  `\usepackage{scrlayer-scrpage}` in `pdf/header.tex` always has
+  a matching KOMA-Script class. Setting `documentclass: article`
+  used to break the build with an obscure LaTeX error.
 - PDF format: page-header logo is now overridable. The bundled
   default lives behind `\providecommand{\pdflogo}` /
   `\providecommand{\pdflogowidth}` in `pdf/header.tex`, so

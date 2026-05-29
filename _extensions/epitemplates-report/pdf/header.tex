@@ -12,6 +12,22 @@
 \definecolor{impredprim}{HTML}{C0392B}
 \definecolor{impredsec}{HTML}{F9EBEA}
 
+% Quarto callout colours — match the HTML SCSS palette so callout
+% rendering looks the same across html / revealjs / pdf. Quarto's
+% LaTeX callout template references colours by these names; if a
+% future Quarto release renames them these \definecolor calls
+% become no-ops (no error) and callouts fall back to defaults.
+\definecolor{quarto-callout-note-color}{HTML}{2E4473}
+\definecolor{quarto-callout-note-color-frame}{HTML}{2E4473}
+\definecolor{quarto-callout-caution-color}{HTML}{FAB872}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{FAB872}
+\definecolor{quarto-callout-important-color}{HTML}{C0392B}
+\definecolor{quarto-callout-important-color-frame}{HTML}{C0392B}
+\definecolor{quarto-callout-tip-color}{HTML}{588157}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{588157}
+\definecolor{quarto-callout-warning-color}{HTML}{FAB872}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{FAB872}
+
 \newmdenv[skipabove=7pt,
 skipbelow=7pt,
 backgroundcolor=secondarybg,

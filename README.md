@@ -124,6 +124,31 @@ format:
       - \def\pdflogowidth{4cm}
 ```
 
+## Security
+
+The template treats your YAML front matter as trusted input — but
+the few values that flow directly into rendered HTML or LaTeX are
+validated before they reach the output:
+
+- `logo:` / `logo2:` must be local file paths. URL schemes
+  (`javascript:`, `data:`, `http://`, `file://`, …) are blocked
+  by `scripts/validate-logo.lua` so a malicious value cannot
+  inject script tags into the HTML `<img src>` or escape the
+  `\def\pdflogo{...}` macro.
+- `pdf-logo-width:` must be a LaTeX dimension (`<number><unit>`,
+  e.g. `5cm`); anything else is rejected.
+- The HTML title-block sets `referrerpolicy="no-referrer"` on
+  the logo `<img>` tags as a defence-in-depth measure.
+- The PDF format pins `documentclass: scrartcl` so the bundled
+  `\usepackage{scrlayer-scrpage}` always has a matching
+  KOMA-Script class. If you need a different document class, swap
+  the package in your own `header-includes:`.
+
+If you render a report from untrusted input (e.g. a `.qmd` you
+received from outside your team), treat the embedded YAML as code
+you are about to run — these checks reduce the blast radius but
+do not replace reading what you are about to render.
+
 ## Formats
 
 <div align="center">

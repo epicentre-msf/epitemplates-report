@@ -11,6 +11,8 @@ contributes:
         - partials/title-block.html
       logo: img/epicentre_msf_logo_transparent.png
       embed-resources: true
+      filters:
+        - scripts/validate-logo.lua
       smooth-scroll: true
       code-fold: show
       code-tools: false
@@ -26,16 +28,20 @@ contributes:
       overview: true
       progress: true
       embed-resources: true
+      filters:
+        - scripts/validate-logo.lua
     pptx:
       incremental: true
       reference-doc: pptx/epicentre-pptx-template.pptx
     pdf:
       toc: true
       papersize: a4paper
+      documentclass: scrartcl
       include-in-header:
         - pdf/header.tex
       classoption: oneside
       filters:
+        - scripts/validate-logo.lua
         - scripts/inject-pdf-logo.lua
     docx:
       reference-doc: docx/reference.docx 
