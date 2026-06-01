@@ -1,0 +1,116 @@
+<!-- epitemplates-deck — on-screen Fullscreen + Agenda controls (B8 review #5).
+     The source decks shipped explicit buttons; reveal gives the same actions
+     natively (F = fullscreen, ESC / the ☰ menu = overview), but authors asked
+     for visible affordances. This injects a small bottom-right control cluster
+     wired to the reveal.js global API. Self-contained: no network, no deps. -->
+<div class="deck-controls" aria-hidden="false">
+  <button type="button" class="deck-ctl" id="deckAgenda"
+          title="Go to the agenda (press 2)" aria-label="Agenda">
+    <svg viewBox="0 0 16 16" width="15" height="15" fill="none"
+         stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <path d="M2 4h12M2 8h12M2 12h12"/>
+    </svg>
+    <span>Agenda</span>
+  </button>
+  <button type="button" class="deck-ctl" id="deckFs"
+          title="Toggle full screen (press F)" aria-label="Full screen">
+    <svg viewBox="0 0 16 16" width="15" height="15" fill="none"
+         stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M3 6V3h3M13 6V3h-3M3 10v3h3M13 10v3h-3"/>
+    </svg>
+    <span>Full screen</span>
+  </button>
+</div>
+
+<style>
+  .deck-controls {
+    position: fixed;
+    right: 16px;
+    top: 16px;
+    z-index: 40;
+    display: flex;
+    gap: 8px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+  .deck-controls .deck-ctl {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border: 1px solid rgba(14, 122, 122, 0.35);
+    border-radius: 999px;
+    background: rgba(251, 251, 247, 0.82);
+    color: #0e7a7a;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition:
+      background 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .deck-controls .deck-ctl:hover {
+    background: #0e7a7a;
+    border-color: #0e7a7a;
+    color: #fbfbf7;
+  }
+  /* On the full-bleed teal slides (title / dividers) flip to a light pill. */
+  .reveal.divider .deck-controls .deck-ctl,
+  body:has(#title-slide.present) .deck-controls .deck-ctl {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(168, 220, 217, 0.45);
+    color: #e6f5f5;
+  }
+  @media print {
+    .deck-controls {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function whenReady(fn) {
+      if (window.Reveal && Reveal.isReady && Reveal.isReady()) return fn();
+      if (window.Reveal && Reveal.on) {
+        Reveal.on("ready", fn);
+      } else {
+        window.addEventListener("load", function () {
+          setTimeout(fn, 300);
+        });
+      }
+    }
+    whenReady(function () {
+      var fs = document.getElementById("deckFs");
+      var ag = document.getElementById("deckAgenda");
+      if (fs) {
+        fs.addEventListener("click", function () {
+          var d = document;
+          var el = d.documentElement;
+          var active = d.fullscreenElement || d.webkitFullscreenElement;
+          if (!active) {
+            (el.requestFullscreen || el.webkitRequestFullscreen || function () {}).call(el);
+          } else {
+            (d.exitFullscreen || d.webkitExitFullscreen || function () {}).call(d);
+          }
+        });
+      }
+      if (ag && window.Reveal) {
+        ag.addEventListener("click", function () {
+          // Slide 2 (0-indexed 1) is the agenda in this deck family; fall back
+          // to reveal's overview if the deck is shorter.
+          if (Reveal.getTotalSlides && Reveal.getTotalSlides() > 1) {
+            Reveal.slide(1, 0);
+          } else if (Reveal.toggleOverview) {
+            Reveal.toggleOverview();
+          }
+        });
+      }
+    });
+  })();
+</script>

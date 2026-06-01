@@ -1,0 +1,42 @@
+// Semantic deck tokens — the Tier-A / Tier-B fidelity switch.
+// Component SCSS reads ONLY these semantic names ($deck-primary,
+// $deck-accent, …), never a raw hex, so flipping the binding here
+// reskins the whole deck. The raw $deck-* / $col-* palettes come
+// from epitemplates-report/css/_brand.scss (imported by the theme
+// before this file). See deck-format-implementation-plan.md §0 + §1.
+
+/* Tier A — deck-faithful (DEFAULT): teal primary + coral accent. */
+$deck-primary: $deck-teal-700;
+$deck-accent: $deck-coral-500;
+$deck-bg: $deck-paper;
+$deck-fg: $deck-ink;
+
+/* Callout tints (B10). `key` rides the teal scale; `warn` is the source decks'
+   amber highlight — a deck-only hue (not in the brand palette, like coral). */
+$deck-key-bg: $deck-teal-100;
+$deck-key-line: $deck-primary;
+$deck-warn-bg: #fef3c7;
+$deck-warn-line: #f59e0b;
+
+/* Divider / title accent — the source decks' special-slide gold (distinct from
+   the content-slide coral). One token: flip it to reskin every full-bleed slide
+   (e.g. to $deck-accent for a coral identity). */
+$deck-divider-accent: #fcd34d;
+
+/* Light code block (B10, PL-4). The source decks' slides 12-13 use a cream
+   `.code-block.light` surface with dark-ink syntax; an author opts in per block
+   with ```` ```{.r .light} ````. Function + key ride the teal primary; the
+   keyword-red, string-sienna, datatype and comment are source-only syntax hues
+   with no brand-palette equivalent (carried here like the $deck-warn amber). */
+$deck-code-light-bg: #f7f5ef;
+$deck-code-light-fg: $deck-ink;
+$deck-code-light-kw: #d8492e; // keyword / control-flow / number / boolean / attr
+$deck-code-light-str: #a0522d; // string / char (sienna)
+$deck-code-light-fn: $deck-primary; // function / built-in (teal)
+$deck-code-light-type: #5a7878; // datatype (muted teal)
+$deck-code-light-comment: #8098a0; // comment / docstring (muted)
+
+/* Tier B — brand-aligned: comment the two $deck-primary/$deck-accent
+   lines above and uncomment these to ride the Epicentre navy instead.
+   $deck-primary: $col-primary;
+   $deck-accent:  $deck-coral-500; */

@@ -1,0 +1,51 @@
+title: Deck
+author: Epicentre
+version: 1.0.0
+quarto-required: ">=1.8.24"
+contributes:
+  shortcodes:
+    - scripts/deck-shortcodes.lua
+  format:
+    revealjs:
+      theme:
+        - default
+        - css/epicentre_deck_style.scss
+      # Offline fonts (Inter + JetBrains Mono) are injected as a <head> <style>
+      # via include-in-header, NOT a theme scss layer: Quarto's
+      # `embed-resources: true` strips large @font-face data-URIs out of the
+      # compiled theme CSS, so the standalone HTML shipped no embedded fonts.
+      # include-in-header content is emitted verbatim and survives the strip.
+      # Source/provenance for the base64 stays in css/fonts/ (_faces.scss + woff2
+      # + OFL); fonts-head.html is generated from it (see that file's header).
+      include-in-header: fonts-head.html
+      # Fixed 1920×1080 stage, full-bleed, top-aligned (plan §3 Gap #1).
+      # Reveal scales the logical slide to the viewport ("contain").
+      width: 1920
+      height: 1080
+      margin: 0
+      center: false
+      min-scale: 0.1
+      max-scale: 2.0
+      # Runtime parity — all native, replaces the source decks' JS (plan §3).
+      controls: true
+      progress: true
+      slide-number: c/t
+      # Drop Quarto's reveal.js-menu plugin: its bottom-left ☰ button pushed the
+      # stage off-centre (asymmetric left gutter / right clip). The deck ships its
+      # own Agenda + Full-screen affordances via deck-controls.html (top-right).
+      menu: false
+      hash: true
+      transition: none
+      navigation-mode: linear
+      overview: true
+      # Root-relative, like epitemplates-report: ships via the template's
+      # repo-root img/ (B1 prep note — not the plan's ../epitemplates-report
+      # path). Guarded by validate-logo.lua below.
+      logo: img/epicentre_msf_logo_transparent.png
+      embed-resources: true
+      # On-screen Fullscreen + Agenda controls (reveal natives F / ☰ menu, made
+      # visible per B8 review #5). Self-contained HTML+JS, hidden in print.
+      include-after-body: deck-controls.html
+      filters:
+        - scripts/validate-logo.lua
+        - scripts/deck-layout.lua

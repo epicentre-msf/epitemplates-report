@@ -1,0 +1,1164 @@
+/*-- scss:defaults --*/
+
+// epitemplates-deck-revealjs — theme (Sessions B3 + B4).
+// Ports the source decks' header / footer / title geometry (B3) plus
+// cards / chips / dark code block + syntax remap / heatmap (B4)
+// onto reveal's DOM, reading
+// $deck-* tokens so the Tier-A/Tier-B switch in _deck-tokens.scss reskins
+// the switch-bearing hues. See deck-format-implementation-plan.md §3
+// (canvas) + §4 (theme). Lua components (deck-grid, shortcodes) in B5/B6.
+
+// Plan A (confirmed B0/B1): the brand palette resolves on disk via the
+// cross-extension relative import — $col-* + the additive $deck-* block.
+@import "../../epitemplates-report/css/brand";
+// Semantic deck tokens: $deck-primary, $deck-accent, $deck-bg, $deck-fg.
+@import "deck-tokens";
+
+// Fonts: the @font-face rules ship via the separate `_faces.scss`
+// theme entry in _extension.yml (base64-inlined, offline). Here we only
+// bind the families so Inter / JetBrains Mono become the deck defaults.
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-monospace: "JetBrains Mono", ui-monospace, monospace;
+
+// Type scale tuned for the fixed 1920px stage (mirrors the decks, plan §4).
+// Root is the BODY/CARD text size: the source decks size body copy 18-26px
+// inline (never a 36px root), so a 36px root overflowed dense slides and read
+// oversized vs source (B8 review). 24px ≈ the source's dominant 22-24px body.
+$presentation-font-size-root: 24px;
+$presentation-h1-font-size: 96px; // divider / title slides
+$presentation-h2-font-size: 64px; // .slide-title (default slide heading)
+$presentation-h3-font-size: 34px; // card headline (source headlines ~30-32px)
+$presentation-h4-font-size: 26px;
+$presentation-heading-color: $deck-fg;
+$presentation-heading-font-weight: 700;
+$body-color: $deck-ink-2;
+$presentation-slide-text-align: left;
+$presentation-title-slide-text-align: left;
+$link-color: $deck-primary;
+
+/*-- scss:rules --*/
+
+// ─── Letterbox / pillarbox bars (B8 review #1) ────────────────────────
+// The 1920×1080 stage preserves its aspect ratio, so any viewport that is not
+// exactly 16:9 shows bars (pillarbox when wider, letterbox when taller). Reveal
+// scales correctly — it just paints those bars white by default, which reads as
+// stray "empty space". Paint them the deck's dark ink so they frame the stage
+// intentionally, like the source decks' black surround. (In a true 16:9 /
+// full-screen viewport there are no bars at all.)
+html.reveal-full-page,
+.reveal-viewport,
+.reveal-viewport body,
+body.quarto-light {
+  background-color: $deck-teal-900 !important;
+  // Kill any scrollbar: a stray vertical scrollbar narrows the viewport reveal
+  // measures, so it scales by height and seats the stage flush-left ("empty
+  // space only on the left"). With no scrollbar the viewport is the true
+  // width/height and reveal centres the stage symmetrically.
+  overflow: hidden !important;
+}
+
+// ─── Kill the reveal.js-menu chrome (B10 / user) ──────────────────────
+// Quarto injects the reveal.js-menu plugin; its bottom-left ☰ button + the
+// off-canvas panel pushed the stage off-centre (left gutter / right clip).
+// `menu: false` did not suppress it, so remove the DOM it ships outright.
+.reveal .slide-menu-button,
+.slide-menu-button,
+.slide-menu,
+.slide-menu-wrapper,
+.slide-menu-overlay,
+.slide-menu-barebones {
+  display: none !important;
+}
+
+// ─── Symmetric letterbox bars (B10 / user) ────────────────────────────
+// Reveal seats the fixed 16:9 stage with an UNEVEN letterbox (dark strip only
+// on the left). Rather than fight its internal positioning (margin/center/
+// transform overrides all failed — see B8/B10 notes), paint matching dark
+// strips on BOTH sides so the framing always reads symmetric. Each strip's width
+// is half the real horizontal letterbox, computed from reveal's own live vars
+// (`--viewport-width`, `--slide-width`, `--slide-scale` — set on the body and
+// updated on resize), so the right strip exactly mirrors reveal's left one and
+// it stays responsive. The width is 0 in a true 16:9 fullscreen (no letterbox),
+// so the strips vanish there. Painted below the chrome (controls/agenda are
+// z-index 31/40) and non-interactive.
+.reveal-viewport::before,
+.reveal-viewport::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: max(
+    0px,
+    calc(
+      (var(--viewport-width, 100vw) - var(--slide-width, 1920px) *
+            var(--slide-scale, 1)) / 2
+    )
+  );
+  background: $deck-teal-900;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.reveal-viewport::before {
+  left: 0;
+}
+
+.reveal-viewport::after {
+  right: 0;
+}
+
+// ─── Stage-relative chrome anchors (B10 / user: footer/counter/logo) ───
+// The native footer, slide-number and logo are pinned `fixed` to the VIEWPORT,
+// so in any window that is not exactly 16:9 the letterbox pushes them off the
+// slide — the footer slid into the left bar (clipped) and the counter + logo
+// into the right bar (the source decks never show this: their `.slide-footer`
+// is `absolute` INSIDE the 1920×1080 stage). We cannot move the chrome into the
+// scaled stage, but we can re-pin it to the stage's edges using reveal's own
+// live layout vars (same `--viewport-*` / `--slide-*` / `--slide-scale` the
+// letterbox bars read, updated on every resize). `--lb-x`/`--lb-y` are the half-
+// letterbox on each axis (0 in a true 16:9 view); `--sc` scales the inset + font
+// so the chrome lands exactly where the source's 100px / 40px frame margins sit.
+.reveal-viewport {
+  --sc: var(--slide-scale, 1);
+  --lb-x: max(
+    0px,
+    calc((var(--viewport-width, 100vw) - var(--slide-width, 1920px) * var(--sc)) / 2)
+  );
+  --lb-y: max(
+    0px,
+    calc(
+      (var(--viewport-height, 100vh) - var(--slide-height, 1080px) * var(--sc)) / 2
+    )
+  );
+}
+
+// ─── Frame: the 100px content inset (plan §3 Gap #3) ──────────────────
+// Reveal owns slide visibility + the 1920×1080 transform; we only rebuild
+// the source decks' frame padding against that known box. Dividers and the
+// title slide opt out (they are full-bleed, centered — see below).
+.reveal .slides > section:not(.divider):not(#title-slide),
+.reveal .slides > section > section:not(.divider) {
+  // border-box so the 100px frame is INSIDE the 1920 stage → the content box is
+  // 1720, and `width:100%` grids fit it instead of resolving to the full 1920
+  // and overflowing past the frame to the stage edge (which the letterbox bar
+  // then clipped). This was the real cause of the right-card "bleed".
+  box-sizing: border-box;
+  padding: 100px 100px 80px 100px;
+  text-align: left;
+  // Clip any stray horizontal overflow AT the 1920 stage edge so it can never
+  // spill into (and hide) reveal's centred right-hand letterbox bar — which is
+  // what read as an "off-centre / space-only-on-the-left" slide. The stage
+  // itself is centred (verified: translate(-50%) scale); this just stops wide
+  // grids/splits from painting past it.
+  overflow-x: clip;
+  // Paper fill for the slide itself, so only the OUTSIDE letterbox bars take
+  // the dark viewport colour (B8 review #1). Dividers / title paint their own
+  // full-bleed teal via ::before and are excluded above.
+  background: $deck-paper;
+}
+
+// Title-kicker eyebrow ABOVE the slide title (source decks' kicker→title
+// rhythm). Quarto always emits the slide's `##` as the first child <h2>, so the
+// `{{< eyebrow >}}` that follows lands below it; flexing the section and giving
+// ONLY that first eyebrow `order:-1` lifts it back above the title. Mid-content
+// section-label eyebrows (not adjacent to the h2) are untouched. Content slides
+// only — dividers / title / their full-bleed layouts opt out. (PL-3 / B8 review)
+// `!important` beats reveal's `.slides > section.present { display: block }`,
+// which otherwise wins on specificity and keeps the section non-flex.
+.reveal .slides > section:not(.divider):not(#title-slide) {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.reveal
+  .slides
+  > section:not(.divider):not(#title-slide)
+  > h2:first-of-type
+  + .eyebrow {
+  order: -1;
+  margin: 0 0 10px 0;
+}
+
+// ─── Columns: keep native splits inside the 100px frame ───────────────
+// Quarto sizes `::: {.column width="57%"}` as a fixed flex-basis; with a gap
+// between columns, 57%+43%+gap overflows the content box and the right column
+// hugged the stage edge. Allow the columns to shrink to fit (min-width:0) and
+// give the row a real gap so the widths read as proportions, not hard sizes.
+.reveal .columns {
+  gap: 56px;
+}
+
+.reveal .columns > .column {
+  min-width: 0;
+}
+
+// ─── Eyebrow: mono, uppercase kicker above the title ──────────────────
+.reveal .eyebrow {
+  display: block;
+  margin: 0 0 16px 0;
+  font-family: $font-family-monospace;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $deck-primary;
+}
+
+// ─── Slide title / subtitle ───────────────────────────────────────────
+// A plain `## Title` renders as the slide's <h2>; style it as the deck's
+// slide-title. The explicit .slide-title / .slide-subtitle classes give
+// the same look when authored directly.
+.reveal .slides section > h2,
+.reveal h2.slide-title,
+.reveal .slide-title {
+  margin: 0 0 52px 0;
+  font-size: $presentation-h2-font-size;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: $deck-fg;
+  text-transform: none;
+}
+
+.reveal .slide-subtitle {
+  margin: 0 0 52px 0;
+  font-size: 44px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: $deck-ink-2;
+}
+
+// When an eyebrow immediately precedes the title, tighten the gap to the
+// source deck's 16px header rhythm (the title keeps its 52px lower margin).
+.reveal .eyebrow + h2,
+.reveal .eyebrow + h2.slide-title,
+.reveal .eyebrow + .slide-title {
+  margin-top: 0;
+}
+
+// ─── Footer + accent dot + counter (plan §4) ──────────────────────────
+// Quarto's native footer (`footer:` global / per-slide) + `slide-number: c/t`
+// supply the text and the counter; the SCSS pins them to the source decks'
+// geometry and paints the coral dot. No Lua needed for the footer.
+// Left-pin the footer text bar. A GLOBAL `footer:` renders as `.footer-default`,
+// which Quarto centres by default — `!important` is needed to win that and seat
+// it bottom-left like the source decks. (Per-slide `::: footer` divs land here
+// too.) The coral leading dot was REMOVED (B10 / user): when the global footer
+// centred, the dot read as a stray red circle mid-slide.
+// Footer text bar → bottom-LEFT of the slide stage (source geometry). Anchored
+// off the live letterbox vars so 100px/40px land on the slide's inner frame in
+// any window ratio, not the viewport edge (which clipped it into the left bar).
+.reveal .footer,
+.reveal .footer.footer-default {
+  bottom: calc(var(--lb-y, 0px) + 40px * var(--sc, 1)) !important;
+  left: calc(var(--lb-x, 0px) + 100px * var(--sc, 1)) !important;
+  right: auto !important;
+  margin: 0 !important;
+  max-width: calc(var(--slide-width, 1920px) * var(--sc, 1) * 0.4);
+  text-align: left !important;
+  font-family: $font-family-monospace;
+  font-size: calc(18px * var(--sc, 1));
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $deck-mute;
+}
+
+// Counter → bottom-CENTRE of the slide (B10 / user). The stage is centred in the
+// viewport, so the viewport's horizontal centre IS the slide's centre — `left:50%`
+// + translate seats it dead-centre at any ratio; the y-inset keeps it on the
+// slide's bottom frame. `!important` overrides reveal's slide-number plugin, which
+// otherwise paints it top-right at runtime.
+.reveal .slide-number {
+  top: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(var(--lb-y, 0px) + 40px * var(--sc, 1)) !important;
+  transform: translateX(-50%);
+  padding: 0;
+  background: none;
+  font-family: $font-family-monospace;
+  font-size: calc(18px * var(--sc, 1));
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: $deck-mute;
+}
+
+.reveal .slide-number a {
+  color: inherit;
+}
+
+// Logo → bottom-RIGHT of the slide stage (mirrors the footer/counter inset), so
+// it rides the frame instead of sliding into the right letterbox bar. Sized off
+// the scale so it reads consistent across ratios.
+.reveal .slide-logo {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: calc(var(--lb-x, 0px) + 100px * var(--sc, 1)) !important;
+  bottom: calc(var(--lb-y, 0px) + 32px * var(--sc, 1)) !important;
+  height: calc(54px * var(--sc, 1)) !important;
+  max-height: none !important;
+  width: auto !important;
+}
+
+// ─── Divider: full-bleed $deck-primary section, paper text ────────────
+// `## Section {.divider}` → a full-bleed teal slide. The full bleed is
+// painted by a fixed ::before that fills the transformed 1920×1080 stage
+// (the section box alone would not reach the edges); content sits centered
+// on top. The Tier switch flows through because the colour is $deck-primary.
+// The shared full-bleed decoration: $deck-primary fill + faint teal-200
+// concentric rings (right) + a gold rule top and bottom (inset 120px). One SVG
+// data-URI so dividers + the title slide read like the source decks' section
+// pages. Painted by a fixed ::before that fills the transformed 1920×1080 stage.
+$deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201080'%20preserveAspectRatio='xMidYMid%20slice'%3E%3Cg%20transform='translate%281480%20540%29'%20fill='none'%20stroke='%23A8DCD9'%20stroke-width='1.1'%3E%3Ccircle%20r='700'%20opacity='.05'/%3E%3Ccircle%20r='560'%20opacity='.07'/%3E%3Ccircle%20r='400'%20opacity='.10'/%3E%3Ccircle%20r='250'%20opacity='.14'/%3E%3Ccircle%20r='130'%20opacity='.18'/%3E%3C/g%3E%3Crect%20x='120'%20y='100'%20width='1680'%20height='5'%20fill='%23FCD34D'/%3E%3Crect%20x='120'%20y='975'%20width='1680'%20height='5'%20fill='%23FCD34D'/%3E%3C/svg%3E");
+
+.reveal .slides section.divider {
+  // `!important` beats reveal's `.slides > section.present { display:block }`,
+  // which otherwise wins and keeps the section non-flex (so the eyebrow's
+  // order:-1 lift would not apply). Same trick as the content-slide flex rule.
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 150px 120px;
+  height: 1080px;
+  color: $deck-bg;
+}
+
+.reveal .slides section.divider::before,
+.reveal #title-slide::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: $deck-primary $deck-divider-art center / cover no-repeat;
+}
+
+// Eyebrow → gold mono kicker, lifted ABOVE the title (source order). The
+// divider is already a flex column, so order:-1 floats the kicker to the top.
+.reveal .slides section.divider .eyebrow {
+  order: -1;
+  margin: 0 0 24px 0;
+  color: $deck-divider-accent;
+  font-size: 24px;
+  letter-spacing: 0.26em;
+}
+
+.reveal .slides section.divider > h1,
+.reveal .slides section.divider > h2 {
+  margin: 0;
+  max-width: 1400px;
+  color: $deck-bg;
+  font-size: 128px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+// Body copy under a divider title → roomy teal-100 lede, like the source's
+// section-page subtitle.
+.reveal .slides section.divider > p {
+  margin: 40px 0 0 0;
+  max-width: 1300px;
+  color: $deck-teal-100;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.reveal .slides section.divider strong {
+  color: $deck-bg;
+}
+
+// Dividers carry no footer/counter in the source decks. Tag the slide with
+// `{.divider data-state="divider"}` and reveal mirrors the state onto the
+// .reveal element, letting us hide both. (B5's Lua filter will guarantee
+// the class; the data-state stays an authoring opt-in.)
+.reveal.divider .footer,
+.reveal.divider .slide-number,
+.reveal.divider .slide-logo {
+  visibility: hidden !important;
+}
+
+// Robust fallback: when the PRESENT slide is a divider OR the title slide, hide
+// the footer + counter + logo regardless of whether reveal mirrored data-state
+// onto `.reveal`. The source decks' section + title pages carry no chrome.
+.reveal:has(.slides section.present.divider) .footer,
+.reveal:has(.slides section.present.divider) .slide-number,
+.reveal:has(.slides section.present.divider) .slide-logo,
+.reveal:has(.slides section.present#title-slide) .footer,
+.reveal:has(.slides section.present#title-slide) .slide-number,
+.reveal:has(.slides section.present#title-slide) .slide-logo {
+  visibility: hidden !important;
+}
+
+// ─── Title slide: full-bleed section page, like a divider ─────────────
+// `display:flex !important` is REQUIRED, not cosmetic: reveal's
+// `.slides > section.present { display:block !important }` otherwise wins, the
+// section is non-flex, and the subtitle's `order:-1` (below) is ignored — so the
+// gold eyebrow kicker fell BELOW the title and collided with the body text
+// instead of sitting above it as the source does.
+.reveal #title-slide,
+.reveal .slides section#title-slide {
+  padding: 150px 120px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 1080px;
+}
+
+.reveal #title-slide .title {
+  margin: 0;
+  max-width: 1400px;
+  color: $deck-bg;
+  font-size: 150px;
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+// Gold accent run inside the title — the source decks paint the final word of
+// the title in the divider gold (e.g. "Database creation [update.]"). Author it
+// in the YAML title as `[update.]{.tgold}`; Pandoc keeps the span on the h1.
+.reveal #title-slide .title .tgold {
+  color: $deck-divider-accent;
+}
+
+// Subtitle = the gold mono kicker, lifted ABOVE the title (source rhythm).
+.reveal #title-slide .subtitle {
+  order: -1;
+  margin: 0 0 30px 0;
+  color: $deck-divider-accent;
+  font-family: $font-family-monospace;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+// Author + date seated at the foot of the title slide (source corners).
+.reveal #title-slide .quarto-title-authors,
+.reveal #title-slide .author {
+  margin: 56px 0 0 0;
+  color: $deck-bg;
+  font-size: 33px;
+  font-weight: 600;
+}
+
+.reveal #title-slide .date {
+  margin: 10px 0 0 0;
+  color: $deck-divider-accent;
+  font-family: $font-family-monospace;
+  font-size: 24px;
+  letter-spacing: 0.22em;
+}
+
+// ─── Part divider (PL-5): source's gold numeral + 3-part tracker ──────
+// An opt-in RICHER section break that reproduces the source decks' part
+// pages — a 260px gold numeral on the left, a gold title + lede on the
+// right, a "Part N of M" kicker top-left, and a 3-up tracker rail along the
+// bottom that shows which part you are entering. It layers ON TOP of the
+// base `.divider` (full-bleed teal + ring art), so the Tier switch still
+// flows through `$deck-primary`. Author it as:
+//
+//   ## Global overview. {.divider .part-divider data-num="01"}
+//   {{< eyebrow "Part 1 of 3" >}}
+//   The big-picture lede sentence goes here.
+//   :::: part-tracker
+//   ::: {.part .active}
+//   [PART 01]{.num} Global overview
+//   :::
+//   ::: part
+//   [PART 02]{.num} The tech stack
+//   :::
+//   ::: part
+//   [PART 03]{.num} The dashboard
+//   :::
+//   ::::
+//
+// `data-num` on the heading drives the giant numeral via generated content;
+// the `{{< eyebrow >}}` is reused as the top-left kicker (no new shortcode).
+// All `.part-divider …` selectors carry both classes, so plain `.divider`
+// slides are untouched.
+.reveal .slides section.divider.part-divider {
+  // Push the title + lede into the right column and toward the top, leaving
+  // the left gutter for the numeral and the bottom band for the tracker.
+  padding: 280px 100px 220px 1020px;
+  justify-content: flex-start;
+}
+
+// Kicker "Part N of M" → top-left mono teal-200 (lifted OUT of the flex flow,
+// cancelling the base divider's order:-1 gold-above-title placement).
+.reveal .slides section.divider.part-divider .eyebrow {
+  position: absolute;
+  top: 150px;
+  left: 100px;
+  order: 0;
+  margin: 0;
+  color: $deck-teal-200;
+  font-size: 24px;
+  letter-spacing: 0.28em;
+}
+
+// Giant gold part numeral, read from `data-num` on the heading-section.
+.reveal .slides section.divider.part-divider::after {
+  content: attr(data-num);
+  position: absolute;
+  left: 100px;
+  top: 300px;
+  font-family: $font-family-monospace;
+  font-size: 260px;
+  line-height: 0.85;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: $deck-divider-accent;
+}
+
+// Title → gold, lighter than the plain divider's 128px (source = 96px / 700).
+.reveal .slides section.divider.part-divider > h1,
+.reveal .slides section.divider.part-divider > h2 {
+  max-width: 780px;
+  color: $deck-divider-accent;
+  font-size: 96px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+// Lede stays the divider teal-100 lede, capped to the right column width.
+.reveal .slides section.divider.part-divider > p {
+  max-width: 780px;
+  margin-top: 56px;
+}
+
+// Bottom 3-part tracker rail: a faint full-width rule with a short gold tab,
+// then three equal columns. The active part is gold + full opacity; the
+// upcoming parts fade back to teal-200.
+.reveal .slides section.divider.part-divider .part-tracker {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  // Anchor from the TOP, not the bottom: reveal scales the section and its box
+  // can extend past the visible 1080 stage, so `bottom:` lands the rail in the
+  // cropped zone (unlike Quarto's viewport-fixed `.footer`). top:925 places it
+  // near the source's bottom:50 within the 1080 stage and never clips.
+  top: 925px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding-top: 34px;
+  border-top: 6px solid rgba($deck-teal-200, 0.3);
+}
+
+.reveal .slides section.divider.part-divider .part-tracker::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 0;
+  width: 220px;
+  height: 6px;
+  background: $deck-divider-accent;
+}
+
+.reveal .slides section.divider.part-divider .part-tracker .part {
+  opacity: 0.35;
+  color: $deck-teal-200;
+}
+
+.reveal .slides section.divider.part-divider .part-tracker .part.active {
+  opacity: 1;
+  color: $deck-divider-accent;
+}
+
+.reveal .slides section.divider.part-divider .part-tracker .part .num {
+  display: block;
+  font-family: $font-family-monospace;
+  font-size: 20px;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.reveal .slides section.divider.part-divider .part-tracker .part p {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+// ─── Cards (B4, plan §4) ──────────────────────────────────────────────
+// White surface on the paper stage. `.cards` is the source decks' default
+// 3-up grid; the richer arbitrary-column rows arrive as `.deck-grid` (B5).
+.reveal .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // equal columns (source agenda: flex:1)
+  gap: 16px;
+  align-items: stretch; // equal-height cards in a row (B8 review #3)
+}
+
+// Keep multi-column rows inside the content box: a fixed-width track plus a long
+// unbreakable child can otherwise push the row past the 100px frame (the right
+// card hugged the stage edge). Letting items shrink below their content size
+// (min-width:0) pins the row to the box width. Also cap the row itself.
+.reveal .cards,
+.reveal .deck-grid {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+// Grid/flex items default to min-width:auto (= content size), so a card's
+// widest word can force the track wider than its share and push the row past
+// the frame (the right card then slid under the letterbox bar). Force items to
+// shrink to their track and break long tokens. `!important` because some rows
+// also carry the Lua's inline `align-items` on the same element.
+.reveal .cards > *,
+.reveal .deck-grid > * {
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+// Multi-card grids (stack 4-up, principles 2x2, ingestion 5-up) must give
+// equal-height cards. The deck-layout.lua filter writes inline
+// `align-items:center` for the single-card "layer row" pattern
+// (`.card.deck-grid`, where the grid IS the card); override that to stretch
+// only when the grid CONTAINS cards (i.e. is not itself a card). B8 review #3.
+.reveal .slides .deck-grid:not(.card) {
+  align-items: stretch !important;
+}
+
+.reveal .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 26px 30px;
+  background: #fff;
+  border: 1px solid $deck-line;
+  color: $deck-ink-2;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+
+// Card head: an icon + chip on the SAME line (authored
+// `{{< icon … >}} {{< chip … >}}`) becomes a heading <p>. The source decks lay it
+// out as a space-between row — large teal icon flush left, chip flush right —
+// not a small icon clumped against the chip. `:has(.deck-icon)` targets only that
+// head paragraph, so number-led pipeline cards (`**01**`) are untouched.
+.reveal .card > p:has(.deck-icon) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 8px 0;
+}
+
+// The icon itself: source weight is a ~46px teal mark. Override the shortcode's
+// 1em / baseline-drop so it sits centred against the chip at a deck-faithful size.
+.reveal .card .deck-icon {
+  width: 42px;
+  height: 42px;
+  color: $deck-primary;
+  vertical-align: middle;
+}
+
+.reveal .card:hover {
+  transform: translateY(-3px);
+  border-color: $deck-coral-300;
+  box-shadow: 0 14px 30px rgba(10, 46, 46, 0.12);
+}
+
+// Vertical rhythm between cards stacked in NORMAL FLOW — columns, the slide
+// body, the source decks' full-width "layer rows", and nested cards. Grids
+// (`.cards` / `.deck-grid`) own their spacing via `gap`, so reset there to
+// avoid doubling. B8 review #2 ("no space between stacked boxes").
+.reveal .card + .card {
+  margin-top: 18px;
+}
+
+.reveal .cards > .card + .card,
+.reveal .deck-grid > .card + .card,
+.reveal .cards > .deck-cardlink + .deck-cardlink,
+.reveal .deck-grid > .deck-cardlink + .deck-cardlink {
+  margin-top: 0;
+}
+
+// Click-navigable card: `:::{.card link="#/2"}` → deck-layout.lua wraps the
+// card in `<a class="deck-cardlink" href="#/2">`; reveal.js follows the
+// internal `#/n` href to that slide. `display:contents` keeps the card itself
+// the grid/flex item (so equal-height + columns still work); the anchor only
+// carries the link. Recovers the source decks' clickable agenda cards
+// (B8 review #3) with no data-goto engine.
+.reveal .deck-cardlink {
+  display: contents;
+  color: inherit;
+  text-decoration: none;
+}
+
+.reveal .deck-cardlink > .card {
+  cursor: pointer;
+}
+
+// Accent borders. Plan §4: top border = $deck-primary, left = $deck-accent.
+// `.top-teal` / `.left-coral` kept as source-deck aliases (free, aids B8/B9).
+.reveal .card.top-accent,
+.reveal .card.top-teal {
+  border-top: 6px solid $deck-primary;
+}
+
+.reveal .card.left-accent,
+.reveal .card.left-coral {
+  border-left: 4px solid $deck-accent;
+}
+
+// Mono corner tag.
+.reveal .card .tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 4px 9px;
+  font-family: $font-family-monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $deck-teal-200;
+  background: rgba(6, 27, 27, 0.85);
+}
+
+// Stat card: kicker + big number + descriptor + viz well.
+.reveal .card.stat {
+  padding: 18px 20px;
+}
+
+.reveal .card.stat .kicker {
+  margin-bottom: 10px;
+  font-family: $font-family-monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $deck-mute;
+}
+
+.reveal .card.stat .big {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: $deck-primary;
+}
+
+.reveal .card.stat .big sup {
+  top: -0.7em;
+  font-size: 0.5em;
+  color: $deck-accent;
+}
+
+.reveal .card.stat .desc {
+  margin-top: 8px;
+  max-width: 280px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: $deck-ink-2;
+}
+
+.reveal .card.stat .viz {
+  margin-top: auto;
+  height: 90px;
+}
+
+.reveal .card.stat .viz svg {
+  width: 100%;
+  height: 100%;
+}
+
+// Photo card: media banner (with bottom scrim) over a body block.
+.reveal .card.photo .media {
+  position: relative;
+  height: 45%;
+  min-height: 120px;
+  background-position: center;
+  background-size: cover;
+}
+
+.reveal .card.photo .media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(6, 27, 27, 0.55) 100%
+  );
+}
+
+.reveal .card.photo .body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 16px 18px;
+}
+
+.reveal .card.photo h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: $deck-fg;
+}
+
+.reveal .card.photo p {
+  margin: 0 0 auto 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: $deck-ink-2;
+}
+
+.reveal .card.photo .meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-family: $font-family-monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $deck-mute;
+}
+
+.reveal .card.photo .meta .country {
+  font-weight: 600;
+  color: $deck-accent;
+}
+
+// ─── Chips (B4, plan §4) ──────────────────────────────────────────────
+.reveal .chip {
+  display: inline-block;
+  padding: 6px 14px;
+  font-family: $font-family-monospace;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $deck-primary;
+  border: 1px solid $deck-primary;
+  border-radius: 2px;
+}
+
+.reveal .chip.solid {
+  color: $deck-bg;
+  background: $deck-primary;
+  border-color: $deck-primary;
+}
+
+.reveal .chip.accent {
+  color: $deck-accent;
+  border-color: $deck-accent;
+}
+
+// ─── Callouts (B10) ───────────────────────────────────────────────────
+// The source decks lean on two tinted boxes: a teal "key point" and an amber
+// "warning". Authored as `:::{.callout-key}` / `:::{.callout-warn}` instead of
+// inline-styled HTML. A leading `{{< eyebrow >}}` inside a callout becomes its
+// kicker label (e.g. "The fix", "Is OCR to blame?"), tinted to match.
+.reveal .callout-key,
+.reveal .callout-warn {
+  // Top margin so a callout that follows a card grid / cards row (e.g. the
+  // ingestion "same six steps…" key point under the 6-up pipeline) is not glued
+  // flush to it. Reset to 0 when the callout opens a column (below), where the
+  // frame header already supplies the gap.
+  margin: 32px 0 18px 0;
+  padding: 28px 34px;
+  font-size: 26px;
+  line-height: 1.55;
+  color: $deck-ink;
+}
+
+// Stacked callouts / a callout that is the first thing in a split column do not
+// need the full leading gap.
+.reveal .column > .callout-key:first-child,
+.reveal .column > .callout-warn:first-child {
+  margin-top: 0;
+}
+
+.reveal .callout-key + .callout-key,
+.reveal .callout-key + .callout-warn,
+.reveal .callout-warn + .callout-key,
+.reveal .callout-warn + .callout-warn {
+  margin-top: 18px;
+}
+
+.reveal .callout-key {
+  background: $deck-key-bg;
+  border-left: 6px solid $deck-key-line;
+}
+
+.reveal .callout-warn {
+  background: $deck-warn-bg;
+  border-left: 6px solid $deck-warn-line;
+}
+
+// First/last child margins collapse to the padding (no double gap).
+.reveal .callout-key > :first-child,
+.reveal .callout-warn > :first-child {
+  margin-top: 0;
+}
+
+.reveal .callout-key > :last-child,
+.reveal .callout-warn > :last-child {
+  margin-bottom: 0;
+}
+
+// In-callout kicker label, tinted to its box.
+.reveal .callout-key .eyebrow {
+  margin-bottom: 12px;
+  color: $deck-key-line;
+}
+
+.reveal .callout-warn .eyebrow {
+  margin-bottom: 12px;
+  color: $deck-warn-line;
+}
+
+// Inline mono run for callout data samples (scrambled / cleaned text, etc.).
+.reveal .mono {
+  font-family: $font-family-monospace;
+}
+
+// ─── Before→after delta (B10) ─────────────────────────────────────────
+// `:::{.card .left-accent .delta}` with `[label]{.label}` + a
+// `[from]{.from} [→]{.arrow} [to]{.to}` row → the source decks' big "6,165 →
+// 2,194" stat-shift box, no inline HTML.
+.reveal .card.delta {
+  padding: 24px 30px;
+}
+
+.reveal .card.delta .label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 21px;
+  color: $deck-mute;
+}
+
+.reveal .card.delta .from,
+.reveal .card.delta .to {
+  font-family: $font-family-monospace;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.reveal .card.delta .from {
+  color: $deck-mute;
+}
+
+.reveal .card.delta .to {
+  color: $deck-primary;
+  font-weight: 800;
+}
+
+.reveal .card.delta .arrow {
+  margin: 0 12px;
+  font-size: 32px;
+  font-weight: 700;
+  color: $deck-accent;
+}
+
+// ─── Code blocks (B4, plan §4, Gap #4) ────────────────────────────────
+// Authors write a normal fenced ```r``` block; Quarto/Pandoc emit
+// skylighting token spans (.kw/.dt/.st/.co/.fu/.dv … confirmed in B0). We
+// paint the source decks' dark code surface and remap those token classes
+// to the deck syntax palette — NO hand-tokenizing. The syntax hues are the
+// decks' fixed dark scheme (raw $deck-* palette, like B3's $deck-mute);
+// the one switch-aware hue is keywords → $deck-accent.
+.reveal div.sourceCode,
+.reveal pre,
+.reveal .code-block {
+  width: 100%;
+  margin: 0 0 20px 0;
+  background: $deck-code-bg;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.reveal pre,
+.reveal .code-block {
+  padding: 36px 40px;
+  overflow: auto;
+}
+
+.reveal div.sourceCode > pre {
+  margin: 0;
+  padding: 0;
+}
+
+.reveal pre code,
+.reveal code.sourceCode,
+.reveal .code-block {
+  max-height: none;
+  padding: 0;
+  font-family: $font-family-monospace;
+  font-size: 22px;
+  line-height: 1.55;
+  color: $deck-teal-100;
+  white-space: pre;
+  background: transparent;
+}
+
+// Skylighting token remap → deck syntax palette:
+//   keyword / control-flow / constant·boolean / attribute·decorator → accent
+//   string / char / datatype                                        → coral-300
+//   number (dec / base-N / float)                                   → coral-100
+//   function / built-in                                             → teal-200
+//   comment / docstring                                             → mute italic
+.reveal code span.kw,
+.reveal code span.cf,
+.reveal code span.cn,
+.reveal code span.at {
+  color: $deck-accent;
+}
+
+.reveal code span.st,
+.reveal code span.ch,
+.reveal code span.vs,
+.reveal code span.dt {
+  color: $deck-coral-300;
+}
+
+.reveal code span.dv,
+.reveal code span.bn,
+.reveal code span.fl {
+  color: $deck-coral-100;
+}
+
+.reveal code span.fu,
+.reveal code span.bu {
+  color: $deck-teal-200;
+}
+
+.reveal code span.co,
+.reveal code span.do {
+  font-style: italic;
+  color: $deck-mute;
+}
+
+// ─── Light code block (B10, PL-4, optional) ───────────────────────────
+// Opt-in cream variant matching the source decks' slides 12-13. Mark a fenced
+// block ```` ```{.r .light} ```` — the `.light` class lands on the <pre>;
+// a raw `:::{.code-block .light}` surface also works. Everything below only
+// overrides the dark surface + the skylighting token hues for that one block,
+// so the dark default (above) is untouched. Higher specificity (`pre.light …`)
+// lets these win over the dark rules without `!important`.
+.reveal pre.light,
+.reveal .code-block.light,
+.reveal div.sourceCode:has(> pre.light) {
+  background: $deck-code-light-bg;
+  border: 1px solid $deck-line;
+}
+
+.reveal pre.light code,
+.reveal pre.light,
+.reveal .code-block.light {
+  color: $deck-code-light-fg;
+}
+
+// keyword / control-flow / constant·boolean / attribute·decorator / number → red
+.reveal pre.light code span.kw,
+.reveal pre.light code span.cf,
+.reveal pre.light code span.cn,
+.reveal pre.light code span.at,
+.reveal pre.light code span.dv,
+.reveal pre.light code span.bn,
+.reveal pre.light code span.fl {
+  color: $deck-code-light-kw;
+}
+
+// string / char / verbatim-string → sienna
+.reveal pre.light code span.st,
+.reveal pre.light code span.ch,
+.reveal pre.light code span.vs {
+  color: $deck-code-light-str;
+}
+
+// datatype → muted teal
+.reveal pre.light code span.dt {
+  color: $deck-code-light-type;
+}
+
+// function / built-in → teal primary
+.reveal pre.light code span.fu,
+.reveal pre.light code span.bu {
+  color: $deck-code-light-fn;
+}
+
+// comment / docstring → muted italic
+.reveal pre.light code span.co,
+.reveal pre.light code span.do {
+  font-style: italic;
+  color: $deck-code-light-comment;
+}
+
+// ─── Heatmap (B4, plan §4, optional) ──────────────────────────────────
+// CSS-grid port of the source decks' coverage matrix. Cell tint rides
+// $deck-primary so the Tier switch flows; empty cells use the paper tint.
+.reveal .heatmap {
+  display: grid;
+  grid-template-columns: 80px repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.reveal .heatmap .th {
+  display: flex;
+  align-items: center;
+  padding: 6px 4px;
+  font-family: $font-family-monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $deck-mute;
+}
+
+.reveal .heatmap .th.row {
+  justify-content: flex-start;
+  color: $deck-ink-2;
+}
+
+.reveal .heatmap .th.col {
+  justify-content: center;
+  text-align: center;
+}
+
+.reveal .heatmap .cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  font-family: $font-family-monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: $deck-fg;
+  background: $deck-primary;
+}
+
+.reveal .heatmap .cell .pct {
+  color: $deck-bg;
+}
+
+.reveal .heatmap .cell[data-v="0"] {
+  color: $deck-mute;
+  background: $deck-paper-2;
+}
+
+.reveal .heatmap .cell[data-v="0"] .pct {
+  color: $deck-mute;
+}
