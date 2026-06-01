@@ -1,32 +1,21 @@
+% PDF preamble for epitemplates-report.
+%
+% Brand colours are NOT hard-coded here. scripts/inject-brand-colors.lua
+% reads brand.yml and prepends the matching \definecolor{...}{HTML}{...}
+% block to header-includes, which Quarto emits BEFORE this file. So the
+% colour names used below (primary, secondary, secondarybg, impredprim,
+% impredsec) — plus the quarto-callout-* colours — are already defined
+% by the time LaTeX reaches the boxes and environments here.
+%
+% To change the palette, edit brand.yml (the single source of truth).
+% css/_brand.scss still carries its own copy for the HTML / RevealJS
+% SCSS layer (deferred to a later migration session), so brand.yml and
+% css/_brand.scss must still be edited in lockstep until that lands —
+% but this LaTeX file no longer duplicates any hex value.
+
 \usepackage[framemethod=default]{mdframed}
 \usepackage{mathpazo}
 \usepackage{scrlayer-scrpage}
-
-\definecolor{primary}{HTML}{2E4473}
-\definecolor{primarylight}{HTML}{E4EDF3}
-\definecolor{primarylightinline}{HTML}{E4EDF3}
-\definecolor{secondary}{HTML}{A1B8CF}
-\definecolor{secondarybg}{HTML}{F5F9FB}
-\definecolor{darkgrey}{HTML}{C5C5C5}
-\definecolor{lightgrey}{HTML}{F8F8F8}
-\definecolor{impredprim}{HTML}{C0392B}
-\definecolor{impredsec}{HTML}{F9EBEA}
-
-% Quarto callout colours — match the HTML SCSS palette so callout
-% rendering looks the same across html / revealjs / pdf. Quarto's
-% LaTeX callout template references colours by these names; if a
-% future Quarto release renames them these \definecolor calls
-% become no-ops (no error) and callouts fall back to defaults.
-\definecolor{quarto-callout-note-color}{HTML}{2E4473}
-\definecolor{quarto-callout-note-color-frame}{HTML}{2E4473}
-\definecolor{quarto-callout-caution-color}{HTML}{FAB872}
-\definecolor{quarto-callout-caution-color-frame}{HTML}{FAB872}
-\definecolor{quarto-callout-important-color}{HTML}{C0392B}
-\definecolor{quarto-callout-important-color-frame}{HTML}{C0392B}
-\definecolor{quarto-callout-tip-color}{HTML}{588157}
-\definecolor{quarto-callout-tip-color-frame}{HTML}{588157}
-\definecolor{quarto-callout-warning-color}{HTML}{FAB872}
-\definecolor{quarto-callout-warning-color-frame}{HTML}{FAB872}
 
 \newmdenv[skipabove=7pt,
 skipbelow=7pt,
@@ -85,3 +74,15 @@ innerbottommargin=5pt]{impbox}
 \providecommand{\pdflogowidth}{5cm}
 
 \cohead[{\includegraphics[width=\pdflogowidth]{\pdflogo}}]{}
+
+% Brand the PDF body: colour all sectioning headings + the title and
+% the hyperlinks with the primary brand colour. `primary` is defined
+% by scripts/inject-brand-colors.lua (from brand.yml, or a consumer's
+% brand), so the PDF carries the brand identity by default and
+% re-brands when a consumer ships their own palette. `disposition`
+% is the KOMA font shared by the title and every \section* level, so
+% one \addtokomafont covers them all without dropping the bold/size.
+\addtokomafont{disposition}{\color{primary}}
+% Defer \hypersetup to \begin{document}: this header is injected before
+% Quarto loads hyperref, so calling it now would be an undefined macro.
+\AtBeginDocument{\hypersetup{linkcolor=primary, urlcolor=primary, citecolor=primary}}

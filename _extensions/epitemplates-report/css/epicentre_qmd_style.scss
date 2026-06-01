@@ -64,14 +64,27 @@ $link-underline-left: -2px;
 
 /*-- scss:rules --*/
 
+/* Brand-driven colours.
+   Every colour in this block reads a `--brand-*` CSS custom
+   property that Quarto emits from brand.yml's `palette:` block.
+   By default each `--brand-*` equals the bundled Epicentre palette
+   (see css/_brand.scss + brand.yml), so the default render is
+   unchanged. A consumer who ships their own brand (an explicit
+   `brand:` key in their `_quarto.yml`) recolours the report with
+   no SCSS edits, because the same custom properties then resolve
+   to their palette. The scss:defaults above stay on the bundled
+   `$col-*` values so Quarto's own compile-time colour maths keeps
+   working; the rules below re-skin the visible surfaces through
+   the custom properties. */
+
 h1, h2, h3 {
-  color: $col-primary;
+  color: var(--brand-primary);
 }
 
 h1.title {
   font-size: $title-block-font-size;
   font-weight: $weight-title;
-  color: $col-primary;
+  color: var(--brand-primary);
 }
 
 h1 {
@@ -92,7 +105,7 @@ h4 {
 
 p.subtitle {
   font-style: italic;
-  color: $col-subtitle;
+  color: var(--brand-subtitle);
 }
 
 .author {
@@ -102,14 +115,14 @@ p.subtitle {
 /* BLOCKQUOTE */
 .blockquote {
   font-size: 1em;
-  color: $col-primary;
-  border-left-color: $col-primary;
+  color: var(--brand-primary);
+  border-left-color: var(--brand-primary);
 }
 
 /* Inline code */
 code {
   border-radius: 5px;
-  color: $col-primary;
+  color: var(--brand-primary);
 }
 
 /* Customize code block and output */
@@ -119,26 +132,26 @@ code {
 
 /* Callout styles */
 div.callout-note.callout {
-  border-left-color: $col-primary;
-  background-color: $col-secondary-bg;
+  border-left-color: var(--brand-primary);
+  background-color: var(--brand-secondary-bg);
   border-radius: 10px;
 }
 
 div.callout-caution.callout {
-  border-left-color: $col-yellow-prim;
-  background-color: $col-yellow-sec;
+  border-left-color: var(--brand-warning);
+  background-color: var(--brand-yellow-sec);
   border-radius: 10px;
 }
 
 div.callout-important.callout {
-  border-left-color: $col-red-prim;
-  background-color: $col-red-sec;
+  border-left-color: var(--brand-danger);
+  background-color: var(--brand-red-sec);
   border-radius: 10px;
 }
 
 div.callout-tip.callout {
-  border-left-color: $col-green-prim;
-  background-color: $col-green-sec;
+  border-left-color: var(--brand-success);
+  background-color: var(--brand-green-sec);
   border-radius: 10px;
 }
 
@@ -148,25 +161,25 @@ h2#toc-title {
 }
 
 .nav-link {
-  border-left-color: $col-primary;
+  border-left-color: var(--brand-primary);
   border-left-width: thick;
   border-radius: 3px;
 }
 
 .nav-link:hover, .nav-link:focus, .nav-link.active {
-  background-color: $col-secondary-bg;
+  background-color: var(--brand-secondary-bg);
   font-weight: 700;
 }
 
 /* book */
 .sidebar-title {
   font-weight: 700;
-  color: $col-primary;
+  color: var(--brand-primary);
 }
 
 .sidebar-item-text:hover, .sidebar-item-text:focus, .sidebar-item-text.sidebar-link.active {
-  background-color: $col-secondary-bg;
-  color: $col-primary;
+  background-color: var(--brand-secondary-bg);
+  color: var(--brand-primary);
   font-weight: 700;
 }
 
@@ -175,14 +188,14 @@ p>a {
   text-decoration: none;
   cursor: pointer;
   font-weight: 400;
-  color: $col-primary;
+  color: var(--brand-primary);
   position: relative;
 }
 
 p>a::after {
   text-decoration: none;
   content: "";
-  background: $col-yellow-sec;
+  background: var(--brand-yellow-sec);
   width: $link-underline-width;
   position: absolute;
   bottom: $link-underline-bottom;
@@ -195,4 +208,39 @@ p>a::after {
 
 p>a:hover::after {
   height: calc(100%);
+}
+
+/* Re-skin the Quarto/Bootstrap-generated surfaces that otherwise
+   only follow the scss:defaults above, so a consumer brand reaches
+   them too. Defaults equal the bundled palette, so the default
+   render is unchanged. */
+
+/* Inline code background */
+code,
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode),
+p code.sourceCode, li code.sourceCode, td code.sourceCode {
+  background-color: var(--brand-primary-light);
+}
+
+/* Code block surface */
+div.sourceCode {
+  background-color: var(--brand-secondary-bg);
+  border-color: var(--brand-secondary-bg);
+}
+
+/* Right-hand table of contents active / hover */
+.sidebar nav[role=doc-toc] ul>li>a.active,
+.sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
+  border-left-color: var(--brand-primary);
+  color: var(--brand-primary) !important;
+}
+
+.sidebar nav[role=doc-toc] ul>li>a:hover,
+.sidebar nav[role=doc-toc] ul>li>ul>li>a:hover {
+  color: var(--brand-primary) !important;
+}
+
+/* Navbar (book / website projects) */
+.navbar {
+  background-color: var(--brand-secondary-bg);
 }

@@ -1,3 +1,14 @@
+// Active palette source for HTML + RevealJS. brand.yml is the
+// canonical documentation + extension-contribution surface, but
+// Quarto's brand SCSS layer (as of 1.9.37 / 1.10 prerelease)
+// only exposes $brand-* and $primary in scss:rules, not in
+// scss:defaults. The extension SCSS sets ~20 Bootstrap/Quarto
+// defaults from $col-* (navbar-bg, code-bg,
+// presentation-heading-color, …), so the palette has to be
+// available in scss:defaults — which means it lives here. EDIT
+// brand.yml AND THIS FILE IN LOCKSTEP — hex codes must match or
+// the documented brand will drift from the rendered brand.
+
 /* Shared brand palette for epitemplates-report.
    Edit this file to refresh the brand colours; both
    epicentre_qmd_style.scss and epicentre_revealjs_style.scss
@@ -17,3 +28,23 @@ $col-yellow-sec: #FEF6E7;
 $col-green-prim: #588157;
 $col-green-sec: #e9f5eb;
 $body-bg: white;
+
+/* --- Deck-format palette (consumed ONLY by epitemplates-deck-revealjs) --- */
+/* Additive. Safe: no other SCSS references these names, so every existing
+   format (html/pdf/docx/pptx + epitemplates-report-revealjs) is unchanged.
+   Derived from the deck design reference (see the deck format design notes). */
+$deck-teal-900: #0A2E2E;
+$deck-teal-700: #0E7A7A;
+$deck-teal-500: #159C9C;
+$deck-teal-200: #A8DCD9;
+$deck-teal-100: #E6F5F5;
+$deck-coral-500: #F06E58;
+$deck-coral-300: #FCA87A;
+$deck-coral-100: #FCE8D9;
+$deck-ink: #0A2E2E;
+$deck-ink-2: #1A4545;
+$deck-paper: #FBFBF7;
+$deck-paper-2: #F4F2EA;
+$deck-line: #CDD6D6;
+$deck-mute: #667878;
+$deck-code-bg: #071E1E;

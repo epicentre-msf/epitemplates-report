@@ -1,7 +1,10 @@
 title: Report
 version: 1.0.0
-quarto-required: ">=1.4.0"
+quarto-required: ">=1.8.24"
 contributes:
+  metadata:
+    project:
+      brand: brand.yml
   format:
     html:
       theme:
@@ -9,6 +12,7 @@ contributes:
         - css/epicentre_qmd_style.scss
       template-partials:
         - partials/title-block.html
+      title-block-banner: true
       logo: img/epicentre_msf_logo_transparent.png
       embed-resources: true
       filters:
@@ -22,6 +26,9 @@ contributes:
       toc-collapsed: true
       callout-appearance: minimal
     revealjs:
+      theme:
+        - default
+        - css/epicentre_revealjs_style.scss
       logo: img/epicentre_msf_logo_transparent.png
       incremental: false
       slide-number: c/t
@@ -43,5 +50,6 @@ contributes:
       filters:
         - scripts/validate-logo.lua
         - scripts/inject-pdf-logo.lua
+        - scripts/inject-brand-colors.lua
     docx:
       reference-doc: docx/reference.docx 

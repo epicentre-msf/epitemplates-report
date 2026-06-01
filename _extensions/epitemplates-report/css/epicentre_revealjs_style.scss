@@ -34,16 +34,25 @@ $presentation-title-slide-text-align: left;
 
 /*-- scss:rules --*/
 
+/* Brand-driven colours.
+   Each colour reads a `--brand-*` CSS custom property emitted from
+   brand.yml's `palette:` block; by default it equals the bundled
+   Epicentre palette, so the default render is unchanged, and a
+   consumer who ships their own brand recolours the slides with no
+   SCSS edits. The scss:defaults above keep the bundled `$col-*`
+   values for Quarto's compile-time colour maths; the rules below
+   re-skin the visible surfaces through the custom properties. */
+
 .reveal .slide-background-content {
   background-image: linear-gradient(
-    $col-bg-gradient-start,
-    $col-bg-gradient-end
+    var(--brand-bg-gradient-start),
+    var(--brand-bg-gradient-end)
   ) !important;
 }
 
 p.subtitle {
   font-style: italic;
-  color: $col-secondary;
+  color: var(--brand-secondary);
 }
 
 .quarto-title-affiliation {
@@ -53,8 +62,8 @@ p.subtitle {
 /* BLOCKQUOTE */
 .blockquote {
   font-size: 1em;
-  color: $col-primary;
-  border-left-color: $col-primary;
+  color: var(--brand-primary);
+  border-left-color: var(--brand-primary);
 }
 
 /* Inline code */
@@ -62,11 +71,16 @@ code {
   border-radius: 5px;
 }
 
+/* Slide headings */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  color: var(--brand-primary);
+}
+
 /* Important call-out box (scoped to .reveal slides to avoid colliding
    with Bootstrap / theme-defined .important selectors). */
 .reveal .important {
-  background-color: $col-red-sec;
-  border-left: 6px solid $col-red-prim;
+  background-color: var(--brand-red-sec);
+  border-left: 6px solid var(--brand-danger);
   border-radius: 4px;
   padding: 10px;
   margin: 10px 0;

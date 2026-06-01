@@ -1,0 +1,181 @@
+# Default brand for the epitemplates-report Quarto extension.
+#
+# Status: DECLARED as a brand contribution in _extension.yml
+# (`contributes: metadata: project: brand: brand.yml`), so
+# consumers who install via `quarto add` get this file bundled
+# and can opt in by adding `brand: epitemplates-report` to their
+# own `_quarto.yml`.
+#
+# NOT WIRED into the extension's own SCSS yet. As of Quarto
+# 1.9.37 / 1.10 prereleases, Quarto's brand SCSS layer only
+# exposes `$brand-*` (and the semantic-mapped `$primary`,
+# `$secondary`, …) in `scss:rules` — not in `scss:defaults`.
+# The extension SCSS sets ~20 Bootstrap / Quarto SCSS defaults
+# from the palette (navbar-bg, code-bg,
+# presentation-heading-color, …), so the palette must be
+# available in `scss:defaults`. css/_brand.scss stays as the
+# wired implementation; this file is the canonical documentation
+# + extension-contribution surface.
+#
+# PDF colours likewise stay in pdf/header.tex's \definecolor
+# block: brand.yml's PDF support is Typst-only as of Quarto 1.9.
+#
+# Edit this file AND css/_brand.scss AND pdf/header.tex's
+# \definecolor block in lockstep so the documented brand doesn't
+# drift from the rendered brand.
+
+meta:
+  # `name` is the brand identifier. Shows up in `quarto inspect`
+  # output and in any UI that surfaces brand provenance. Lowercase
+  # kebab-case by convention.
+  name: epitemplates-report
+
+color:
+  # Canonical semantic slots. Quarto's brand schema names these
+  # by ROLE rather than by hex value — `primary` is "the main
+  # brand colour", `success` is "the colour for positive state",
+  # etc. — so the same brand.yml drives consistent meaning across
+  # HTML / RevealJS / Typst PDF / dashboard / Shiny.
+
+  # `primary` — the dominant brand colour. In Bootstrap-themed
+  # HTML it drives the hyperlink colour, the `.btn-primary`
+  # background, focus rings, and (via our extension SCSS) the
+  # heading colour, TOC active state, code-block border, and
+  # blockquote stripe. In RevealJS it drives the link colour and
+  # the progress bar. Pick the one colour a reader should
+  # associate with the brand at a glance.
+  primary: "#2E4473"
+
+  # `secondary` — supporting accent. Drives `.btn-secondary` and
+  # secondary text. In our extension SCSS it's used for the
+  # revealjs subtitle. Should be visually distinct from `primary`
+  # without competing for attention.
+  secondary: "#A1B8CF"
+
+  # `success` — positive / confirmation state. Used by Bootstrap's
+  # `.alert-success` / `.bg-success` / `.text-success` and by the
+  # `:::{.callout-tip}` styling in our SCSS. Conventionally green.
+  success: "#588157"
+
+  # `info` — informational / neutral-positive state. Used by
+  # `.alert-info` / `.bg-info` / `.text-info`. We currently mirror
+  # `secondary` here because the two roles overlap in our reports
+  # (informational asides are styled like supporting accents).
+  info: "#A1B8CF"
+
+  # `warning` — caution / attention state. Used by `.alert-warning`
+  # and the `:::{.callout-caution}` styling. Conventionally
+  # yellow / orange.
+  warning: "#FAB872"
+
+  # `danger` — error / negative state. Used by `.alert-danger`
+  # and the `:::{.callout-important}` styling. Conventionally red.
+  danger: "#C0392B"
+
+  # `light` — very pale neutral, used by Bootstrap for muted
+  # background surfaces (`.bg-light`) and by our extension SCSS
+  # for the TOC inactive-item background.
+  light: "#F8F8F8"
+
+  # `background` — the page / canvas colour under all content.
+  # Quarto uses this to seed `$body-bg` in HTML and the page
+  # background in other formats.
+  background: "#FFFFFF"
+
+  # Palette entries are exposed as `$brand-<name>` SCSS variables
+  # in every Quarto format. Two reasons we maintain a palette
+  # block in addition to the semantic slots above:
+  #
+  # 1. We MIRROR the semantic slots inside palette (primary,
+  #    secondary, success, …) so that one consistent SCSS
+  #    vocabulary works across HTML (Bootstrap-mapped) and
+  #    RevealJS (reveal-mapped). Without the mirror, an SCSS rule
+  #    referencing `$brand-primary` would resolve in HTML but not
+  #    in RevealJS.
+  #
+  # 2. We add EXTENSION-SPECIFIC tints / shades (the `*-light`,
+  #    `*-sec`, gradient stops) that have no semantic equivalent
+  #    but are needed by the extension's callout, code-block, and
+  #    link styling.
+  palette:
+    # Mirror of the eight canonical semantic colours, so SCSS
+    # rules can reference `$brand-primary` etc. uniformly in
+    # every format.
+    primary: "#2E4473"
+    secondary: "#A1B8CF"
+    success: "#588157"
+    warning: "#FAB872"
+    danger: "#C0392B"
+    light: "#F8F8F8"
+
+    # `primary-light` — a very pale tint of `primary`, used as
+    # the inline-code background (the soft halo behind `code`
+    # snippets in HTML body text). Keep contrast with `primary`
+    # high enough that the inline code text stays readable.
+    primary-light: "#E4EDF3"
+
+    # `secondary-bg` — a near-white tint of `secondary`, used as
+    # the navbar background, the code-block background, and the
+    # default callout-note background. Effectively the "soft
+    # surface" colour of the report.
+    secondary-bg: "#F5F9FB"
+
+    # `dark-grey` — neutral mid-grey for de-emphasised UI
+    # (TOC inactive items, separators, muted captions).
+    dark-grey: "#C5C5C5"
+
+    # `subtitle` — body-text colour for subtitles and other
+    # de-emphasised running text. Precomputed as a darkened
+    # variant of `dark-grey` (no runtime SCSS `darken()` call,
+    # which is deprecated in modern Dart Sass).
+    subtitle: "#464646"
+
+    # `red-sec` — pale red tint for the `:::{.callout-important}`
+    # background (and the same role in the RevealJS `.important`
+    # block). Pairs with `danger` as the border colour.
+    red-sec: "#F9EBEA"
+
+    # `yellow-sec` — pale yellow tint for the
+    # `:::{.callout-caution}` background AND for the hyperlink
+    # underline-animation highlight in HTML body text. Pairs
+    # with `warning` as the border colour.
+    yellow-sec: "#FEF6E7"
+
+    # `green-sec` — pale green tint for the `:::{.callout-tip}`
+    # background. Pairs with `success` as the border colour.
+    green-sec: "#e9f5eb"
+
+    # `bg-gradient-start` / `bg-gradient-end` — the two stops of
+    # the RevealJS slide-background linear gradient (a green-to-
+    # blue diagonal that appears behind slide content). These
+    # are deliberately separate from `primary` / `success` so
+    # tweaks to the brand palette don't shift the gradient stops.
+    bg-gradient-start: "#80b882"
+    bg-gradient-end: "#37578b"
+
+logo:
+  # Quarto's brand schema defines three logo size slots — `small`,
+  # `medium`, `large` — each of which can also carry `light` and
+  # `dark` variants. We use only `medium` and `large`; the size
+  # split mirrors the v1 distinction between the transparent
+  # logo (suitable for embedding in HTML / RevealJS title blocks
+  # where a coloured background may or may not be present) and
+  # the solid logo (suitable for the LaTeX PDF page header,
+  # where a transparent PNG would render with a white box behind
+  # it on some printers).
+
+  # `medium` — the HTML / RevealJS title-block logo. Transparent
+  # PNG so it composes cleanly over the white page background OR
+  # over the RevealJS slide-background gradient.
+  medium: img/epicentre_msf_logo_transparent.png
+
+  # `large` — the PDF page-header logo. Solid PNG (white
+  # background baked in) for predictable rendering against the
+  # LaTeX page colour. Width is set separately to 5cm via
+  # `\providecommand{\pdflogowidth}` in pdf/header.tex.
+  large: img/epicentre_msf_logo.png
+
+# typography: deliberately omitted. v1's body and heading fonts
+# come from the Cosmo Bootswatch theme (HTML/RevealJS) and from
+# KOMA scrartcl + mathpazo (PDF); keeping this block silent
+# ensures brand.yml ingestion does NOT override Cosmo's defaults.
