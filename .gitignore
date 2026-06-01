@@ -5,3 +5,7 @@ template.html
 .vscode/
 .Rhistory
 *.icloud
+
+/.quarto/
+**/*.quarto_ipynb
+*.Rproj
