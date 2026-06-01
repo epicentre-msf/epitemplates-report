@@ -42,7 +42,9 @@ The extension exposes five Quarto formats. Use any of these names under the
 
 ## Requirements
 
-- **Quarto** ≥ 1.4.0
+- **Quarto** ≥ 1.8.24 (the colour re-branding below was verified on
+  1.9.37; brand support landed in 1.6 and the brand-extension type
+  in 1.8.24)
 - **LaTeX** with a KOMA-Script document class (for the `pdf` format —
   Quarto's default `scrartcl` satisfies this; setting
   `documentclass: article` will not work because the bundled header loads
@@ -51,6 +53,58 @@ The extension exposes five Quarto formats. Use any of these names under the
   - `bslib`, `bsicons`, `scales` — required for the value-box showcase
   - `tidyverse`, `rio`, `janitor`, `fs`, `here`, `lubridate` — optional,
     only needed if you adapt the demo data-processing chunks
+
+## Re-branding (colours)
+
+By default your report uses the Epicentre / EpiDS palette. To
+recolour the whole thing — headings, links, callouts, code blocks,
+the RevealJS slide gradient, and the PDF — you ship your own
+**brand file** and point your project at it. No SCSS, and the same
+file drives HTML, RevealJS, and PDF.
+
+1. Create a `brand.yml` (or any name) in your project with the
+   colours you want to change, under `color.palette`:
+
+   ```yaml
+   # brand.yml
+   color:
+     palette:
+       primary: "#B5179E"        # headings, links, callout-note, TOC
+       primary-light: "#F6D6F0"  # inline-code background
+       secondary: "#119DA4"      # subtitle, muted text
+       secondary-bg: "#FBEFF9"   # code-block / navbar background
+       danger: "#7A0C2E"         # callout-important border
+       red-sec: "#FBE0F4"        # callout-important background
+       warning: "#E07A00"        # callout-caution border
+       yellow-sec: "#FBF0D6"     # callout-caution background
+       success: "#0B7A4B"        # callout-tip border
+       green-sec: "#D6F6E6"      # callout-tip background
+       subtitle: "#222222"       # subtitle text
+       bg-gradient-start: "#FF8800" # RevealJS slide gradient
+       bg-gradient-end: "#8800FF"
+   ```
+
+2. Point your `_quarto.yml` at it with an **explicit** `brand:`
+   key:
+
+   ```yaml
+   # _quarto.yml
+   project:
+     type: default
+   brand: brand.yml
+   ```
+
+That's it — re-render and your colours flow through every format.
+
+Notes:
+
+- You only list the keys you want to change; anything you omit
+  keeps the Epicentre default.
+- The `brand:` key must be **explicit**. A bare auto-detected
+  `_brand.yml` (with no `brand:` key) is shadowed by the template's
+  own bundled brand, so the override would silently do nothing.
+- The default render (no `brand:` key) is unchanged from before —
+  this is purely additive.
 
 ## Logo overrides
 
@@ -173,3 +227,94 @@ do not replace reading what you are about to render.
 
 ![revealjs screenshot](screenshots/revealjs_presentation.png)
 </div>
+
+## Deck format
+
+Alongside the five report formats, this repo ships a separate, slide-first
+RevealJS format for **decks**: `epitemplates-deck-revealjs`. It renders on a
+fixed, full-bleed 1920×1080 stage with a teal/coral palette, dark code blocks,
+and offline-embedded Inter + JetBrains Mono fonts — so you write plain Quarto
+Markdown and get a designed deck, no per-slide CSS.
+
+Select it the same way you select any format:
+
+```yaml
+title: "My deck"
+subtitle: "A short standfirst"
+author: "You"
+format:
+  epitemplates-deck-revealjs: default
+logo: img/epicentre_msf_logo_transparent.png
+footer: "Part 1 · Global overview"
+```
+
+A worked deck exercising every component lives in
+`component-gallery.qmd`.
+
+### Authoring cheatsheet
+
+You compose slides from a small vocabulary — about six classes plus five
+shortcodes. Everything else is ordinary Markdown (headings, bold/italic,
+links, fenced code, native columns).
+
+> For the richer components — part dividers, callout boxes, before→after
+> deltas, light code blocks — and the slide-authoring gotchas worth knowing
+> before a long deck, see the full
+> [deck authoring guide](AUTHORING.md).
+
+**Slide kinds**
+
+- A normal `## Heading` is your slide title (styled automatically).
+- `## Heading {.divider}` is a full-bleed teal section break.
+- The title slide is built from the YAML `title` / `subtitle`.
+
+**Block classes** (fenced divs, `:::{.class}` … `:::`)
+
+| Class | What it gives you |
+|---|---|
+| `.cards` | a responsive 3-up grid wrapping `.card`s |
+| `.card` | a white surface card; add `.top-accent` (teal top border), `.left-accent` (coral left border), or a `[01]{.tag}` corner tag |
+| `.card .stat` | a stat card — pass `value=` `label=` `icon=` and the inner `.big` / `.kicker` / `.viz` are built for you |
+| `.card .photo` | a media banner (`.media` with a `background-image`) over a `.body` |
+| `.deck-grid cols="260px 380px 1fr 80px"` | the signature multi-column card row — `cols` becomes a real CSS grid |
+| `.heatmap` | a coverage matrix from `.th.row` / `.th.col` / `.cell` (use `data-v="0"` for empty cells) |
+
+**Shortcodes** (inline/atomic)
+
+| Shortcode | Renders |
+|---|---|
+| `{{< eyebrow "How it fits" >}}` | the mono uppercase kicker above a title |
+| `{{< chip "DuckDB" >}}` | an outlined pill — add `solid` (filled teal) or `accent` (coral) |
+| `{{< stat value="120k" label="Enrolments" icon=people accent >}}` | a stat card with the icon drawn |
+| `{{< icon graph-up >}}` | an inline icon (Bootstrap Icons, offline, tinted by surrounding text colour) |
+| `{{< dots >}}` | the decorative title-scatter SVG |
+
+Split slides use native Quarto columns:
+
+````markdown
+:::: {.columns}
+::: {.column width="55%"}
+…left card(s)…
+:::
+::: {.column width="45%"}
+```r
+library(duckdb)            # syntax-coloured by the theme, no hand-tokenizing
+con <- dbConnect(duckdb(), "analysis.duckdb")
+```
+:::
+::::
+````
+
+### Tier switch — colours
+
+The deck ships **deck-faithful** (teal `#0E7A7A` + coral `#F06E58`) by default.
+To recolour it to the Epicentre navy brand instead, flip a single line in
+`_extensions/epitemplates-deck/css/_deck-tokens.scss`:
+
+```scss
+$deck-primary: $deck-teal-700;  // default (deck-faithful)
+// $deck-primary: $col-primary;  // brand-aligned (Epicentre navy)
+```
+
+Every component reads `$deck-primary` / `$deck-accent`, so the whole deck
+re-skins from that one change — coral stays the accent in both.
