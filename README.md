@@ -244,9 +244,15 @@ subtitle: "A short standfirst"
 author: "You"
 format:
   epitemplates-deck-revealjs: default
-logo: img/epicentre_msf_logo_transparent.png
 footer: "Part 1 · Global overview"
+brand: false
 ```
+
+The deck has its **own** brand (teal/coral, no logo), fully separate from the
+report's. Add `brand: false` to every deck: it tells Quarto not to apply the
+report's project-wide brand — which would otherwise tint your slides navy and
+inject the report logo. The deck ships **without** a logo by design; if you want
+a mark on your slides, add `logo: img/your_logo.png`.
 
 A worked deck exercising every component lives in
 `component-gallery.qmd`.

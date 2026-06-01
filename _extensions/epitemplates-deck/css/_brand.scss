@@ -1,0 +1,42 @@
+// Active palette source for the epitemplates-deck RevealJS format.
+//
+// SELF-CONTAINED on purpose, and the SINGLE source of truth for the
+// deck palette. The deck used to reach across to
+// `../../epitemplates-report/css/brand` for these tokens, which
+// coupled the deck's look to the report extension's on-disk layout
+// (move / rename / uninstall the report and the deck theme stopped
+// compiling). The deck now owns its palette here so the two
+// extensions are independent — each ships and renders on its own.
+//
+// The deck has NO brand.yml: its look is driven entirely by this SCSS
+// (the theme reads compile-time $deck-* tokens, never runtime
+// `var(--brand-*)`), and decks render with brand processing off, so a
+// brand.yml would have zero effect. Edit colours HERE.
+
+/* --- Deck palette ------------------------------------------------------ */
+/* The deck's own design-system hues. Component SCSS reads these via the
+   semantic $deck-primary / $deck-accent / … tokens in _deck-tokens.scss,
+   never a raw hex, so the Tier-A/Tier-B switch there reskins the deck. */
+$deck-teal-900: #0A2E2E;
+$deck-teal-700: #0E7A7A;
+$deck-teal-500: #159C9C;
+$deck-teal-200: #A8DCD9;
+$deck-teal-100: #E6F5F5;
+$deck-coral-500: #F06E58;
+$deck-coral-300: #FCA87A;
+$deck-coral-100: #FCE8D9;
+$deck-ink: #0A2E2E;
+$deck-ink-2: #1A4545;
+$deck-paper: #FBFBF7;
+$deck-paper-2: #F4F2EA;
+$deck-line: #CDD6D6;
+$deck-mute: #667878;
+$deck-code-bg: #071E1E;
+
+/* --- Brand-aligned option (Tier B) ------------------------------------- */
+/* Epicentre navy, kept here so the commented Tier-B binding in
+   _deck-tokens.scss ($deck-primary: $col-primary) still compiles if an
+   author flips to the brand-aligned identity. Matches the report brand's
+   primary; if you re-skin the deck to a different house colour, change it
+   here. */
+$col-primary: #2E4473;

@@ -1,0 +1,375 @@
+---
+title: "epitemplates-deck"
+subtitle: "Component gallery — every class & shortcode the format ships"
+author: "Epicentre"
+date: today
+format:
+  epitemplates-deck-revealjs: default
+# This gallery sits at the project root alongside `_extensions/`, `img/`, and
+# `template.qmd` — the layout `quarto use template epicentre-msf/epitemplates-report`
+# scaffolds, and the way you author a real deck. No `logo:` is set, so this deck
+# renders without a logo; add `logo: img/epicentre_msf_logo_transparent.png` to
+# show one. Render with:
+#   quarto render component-gallery.qmd --to epitemplates-deck-revealjs
+footer: "Epicentre · epitemplates-deck gallery"
+# The co-shipped epitemplates-report extension contributes a PROJECT-level brand
+# (brand.yml) that Quarto applies to every format — including this deck — and
+# which would otherwise inject the report's logo. The deck has its own design
+# system, so it opts out at the document level (the only level that overrides a
+# project brand). `brand: false` is the per-deck switch for "no report brand".
+brand: false
+---
+
+## Header rhythm {.smaller}
+
+{{< eyebrow "Eyebrow · slide title · subtitle" >}}
+
+[The slide title is a plain `##`]{.slide-subtitle}
+
+A normal `## Heading` is styled as the deck's `.slide-title` (64 px). The
+mono uppercase **eyebrow** above it comes from `{{< eyebrow >}}`, and the
+coral footer dot + `c/t` counter at the bottom are native (no Lua) — set
+once via `footer:` in the YAML and `slide-number: c/t` in the format.
+
+## Part 1 · Surfaces {.divider}
+
+{{< eyebrow "Dividers are full-bleed teal" >}}
+
+A `## Heading {.divider}` paints the whole 1920×1080 stage `$deck-primary`
+with paper text — no footer, no counter.
+
+## Global overview. {.divider .part-divider data-num="01"}
+
+{{< eyebrow "Part 1 of 3" >}}
+
+The richer section break — a giant numeral, a gold title and lede, and a
+tracker rail showing which part you are entering.
+
+:::: part-tracker
+::: {.part .active}
+[PART 01]{.num} Surfaces & cards
+:::
+::: part
+[PART 02]{.num} Stats & layout
+:::
+::: part
+[PART 03]{.num} Code & icons
+:::
+::::
+
+## Cards & accents
+
+{{< eyebrow "Native .cards grid + accent borders" >}}
+
+:::{.cards}
+:::{.card .top-accent}
+[01]{.tag}
+
+**Top accent**
+
+A `.card.top-accent` draws a 6 px `$deck-primary` top border. Everything
+inside is *real Markdown* — **bold**, *italic*, [links](#/cards-accents).
+:::
+
+:::{.card .left-accent}
+**Left accent**
+
+`.card.left-accent` draws a 4 px `$deck-accent` left border. Cards lift on
+hover.
+:::
+
+:::{.card}
+**Plain card**
+
+A bare `.card` is a white surface on the paper stage with a hairline
+border.
+:::
+:::
+
+## Stat cards — two authoring paths
+
+{{< eyebrow "Shortcode (draws the icon) vs Div filter (defers it)" >}}
+
+:::{.cards}
+{{< stat value="120k" label="Enrolments" icon=people accent >}}
+
+{{< stat value="48" label="Countries" icon=geo-alt >}}
+
+:::{.card .stat value="99.2%" label="Pipeline uptime" icon="speedometer2"}
+:::
+:::
+
+The first two are `{{< stat >}}` shortcodes — they draw the registry SVG
+into `.viz`. The third is the `:::{.card .stat …}` **Div filter** path: it
+injects `.big`/`.kicker` but leaves `.viz` empty (the icon SVG is a known
+B10 punch-list item). Use the shortcode for one-liners, the Div for cards
+with rich Markdown bodies.
+
+## Rich stat card
+
+{{< eyebrow "kicker · big + sup · desc · viz" >}}
+
+:::{.cards}
+:::{.card .stat}
+[Coverage]{.kicker}
+
+[92^%^]{.big}
+
+:::{.desc}
+Of records ingested, cleaned, and validated against the schema.
+:::
+
+:::{.viz}
+{{< icon graph-up >}}
+:::
+:::
+:::
+
+## The signature row — `.deck-grid`
+
+{{< eyebrow "Arbitrary columns in one clean attribute" >}}
+
+:::{.deck-grid cols="260px 380px 1fr 80px"}
+:::{.card .left-accent}
+[Layer 1 · The library]{.tag}
+
+**Read in & clean up**
+
+A *corpus* is every document we can find.
+:::
+
+:::{.card .left-accent}
+[Layer 2 · The toolbox]{.tag}
+
+**Query without a server**
+
+DuckDB runs the analysis in-process.
+:::
+
+:::{.card .left-accent}
+[Layer 3 · What you see]{.tag}
+
+**The deck you're reading**
+
+Pure Markdown, this format.
+:::
+
+:::{.card .stat value="3" label="Layers" icon="diagram-3"}
+:::
+:::
+
+The `deck-layout.lua` filter turns `cols="…"` into a real CSS grid
+(`grid-template-columns:260px 380px 1fr 80px;gap:40px`).
+
+## Photo card
+
+{{< eyebrow "Media banner + scrim over a body block" >}}
+
+:::{.cards}
+:::{.card .photo}
+<div class="media" style="background-image:linear-gradient(135deg,#0E7A7A 0%,#159C9C 60%,#A8DCD9 100%)"></div>
+
+:::{.body}
+### Field data collection
+
+Community health workers entering case data on tablets in the field.
+
+:::{.meta}
+[2024]{} · [Niger]{.country}
+:::
+:::
+:::
+:::
+
+The `.media` carries a `background-image` (here a gradient stand-in for a
+photo); the SCSS adds the bottom scrim. `.meta .country` is coral.
+
+## Callout boxes
+
+{{< eyebrow "Two tinted boxes for the read-this moments" >}}
+
+::: {.callout-key}
+The same six steps run for every document, end to end, from a single command.
+:::
+
+::: {.callout-warn}
+{{< eyebrow "Watch out" >}}
+A document that fails the metadata check is held back, not silently dropped.
+:::
+
+`.callout-key` reads teal on a pale teal tint; `.callout-warn` reads amber on
+a pale amber tint. An optional `{{< eyebrow >}}` inside becomes the label.
+
+## Before → after delta
+
+{{< eyebrow "A compact card for a number moving" >}}
+
+:::{.cards}
+:::{.card .left-accent .delta}
+[Total elements]{.label}
+
+[1,240]{.from} [→]{.arrow} [310]{.to}
+:::
+:::
+
+A `.card.delta` with three inline spans: `.from` is the old value (muted),
+`.to` the new value (teal, bold), and `.arrow` the coral connector.
+
+## Chips
+
+{{< eyebrow "Inline pills, three variants" >}}
+
+{{< chip "DuckDB" >}}
+{{< chip "Quarto" solid >}}
+{{< chip "MCP" accent >}}
+
+`{{< chip "label" >}}` outlines in teal; add `solid` for a filled teal
+pill, `accent` for a coral outline.
+
+## Code & two-column split
+
+{{< eyebrow "Native .columns + dark code, no hand-tokenizing" >}}
+
+:::: {.columns}
+::: {.column width="45%"}
+:::{.card .top-accent}
+**DuckDB** runs the corpus queries in-process — no server, no daemon.
+:::
+:::
+
+::: {.column width="55%"}
+```r
+library(duckdb)
+
+# A normal fenced block — the theme remaps
+# skylighting tokens to the deck palette.
+con <- dbConnect(duckdb(), "analysis.duckdb")
+df <- dbGetQuery(con, "select * from records")
+cat(nrow(df), "records loaded\n")
+```
+:::
+::::
+
+## Light code & the `.mono` helper
+
+{{< eyebrow "Opt-in cream code surface + inline monospace" >}}
+
+For a short snippet on a busy slide, add `.light` to the fence for a cream,
+paper-toned block instead of the dark default:
+
+```{.r .light}
+con <- dbConnect(duckdb(), "analysis.duckdb")
+```
+
+And wrap any inline text in `[…]{.mono}` to render it in JetBrains Mono —
+handy for a file name like [data/clean.duckdb]{.mono} inside prose.
+
+## What this gallery covers. {#sec-agenda}
+
+{{< eyebrow "Agenda — cards that jump to a section" >}}
+
+:::{.cards}
+:::{.card .top-accent link="#sec-icons"}
+[01]{.kicker}
+
+**The icon registry**
+
+Jump straight to the offline Bootstrap Icons set.
+:::
+
+:::{.card .left-accent link="#sec-tier"}
+[02]{.kicker}
+
+**The Tier switch**
+
+Recolour the whole deck from one line.
+:::
+:::
+
+Any `.card` gains click-navigation with `link="#id"`. Link to a section's
+explicit `{#id}` (rewording- and reorder-proof), never a slide number.
+
+## Heatmap
+
+{{< eyebrow "CSS-grid coverage matrix (optional component)" >}}
+
+:::{.heatmap}
+:::{.th}
+:::
+:::{.th .col}
+Q1
+:::
+:::{.th .col}
+Q2
+:::
+:::{.th .col}
+Q3
+:::
+:::{.th .col}
+Q4
+:::
+
+:::{.th .row}
+Africa
+:::
+:::{.cell}
+[88%]{.pct}
+:::
+:::{.cell}
+[91%]{.pct}
+:::
+:::{.cell}
+[95%]{.pct}
+:::
+:::{.cell data-v="0"}
+[—]{.pct}
+:::
+
+:::{.th .row}
+Asia
+:::
+:::{.cell}
+[72%]{.pct}
+:::
+:::{.cell}
+[80%]{.pct}
+:::
+:::{.cell data-v="0"}
+[—]{.pct}
+:::
+:::{.cell data-v="0"}
+[—]{.pct}
+:::
+:::
+
+## Icon registry {#sec-icons .smaller}
+
+{{< eyebrow "Bootstrap Icons, offline, currentColor" >}}
+
+**Development —** {{< icon git >}} {{< icon code-slash >}} {{< icon database >}} {{< icon terminal >}} {{< icon rocket-takeoff >}} {{< icon box-seam >}} {{< icon diagram-3 >}} {{< icon gear >}}
+
+**Statistics —** {{< icon bar-chart >}} {{< icon graph-up >}} {{< icon pie-chart >}} {{< icon table >}} {{< icon people >}} {{< icon geo-alt >}} {{< icon speedometer2 >}}
+
+**Humanitarian —** {{< icon heart-pulse >}} {{< icon hospital >}} {{< icon globe-americas >}} {{< icon droplet >}} {{< icon shield-check >}} {{< icon bandaid >}}
+
+Every glyph inherits the surrounding text colour, so a teal chip or a coral
+stat tints it automatically. Add one by pasting a Bootstrap Icons path into
+the registry table.
+
+## Title decoration — `{{< dots >}}`
+
+{{< eyebrow "Precomputed deterministic scatter" >}}
+
+{{< dots >}}
+
+The `{{< dots >}}` shortcode emits a fixed-seed SVG scatter (44 circles,
+byte-identical every render) — the decorative figure the source decks
+generated at runtime, recovered with no JS and no network.
+
+## Tier switch {#sec-tier .divider}
+
+{{< eyebrow "One line in _deck-tokens.scss" >}}
+
+Everything here renders **Tier A** (deck-faithful teal/coral) by default.
+Switch `$deck-primary` to `$col-primary` in `_deck-tokens.scss` for
+**Tier B** (Epicentre navy) — same components, brand identity.

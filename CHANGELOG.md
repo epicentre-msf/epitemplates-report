@@ -69,6 +69,29 @@ identical.
   `brand.yml` the single source of the PDF palette and lets
   `pdf/header.tex` drop every hard-coded hex value (v2 Session 3).
 
+### Changed
+- **Deck brand separated from the report brand.** The deck format no
+  longer borrows the report extension's palette. Two changes make the
+  `epitemplates-deck` and `epitemplates-report` extensions fully
+  independent:
+  The deck theme now imports its **own** palette,
+  `_extensions/epitemplates-deck/css/_brand.scss` (the single source of
+  truth for the deck colours), instead of the cross-extension
+  `@import "../../epitemplates-report/css/brand"`. A deck now renders even
+  when the report extension is absent (verified), so moving, renaming, or
+  uninstalling one extension never breaks the other. The deck has no
+  brand.yml of its own — its look is SCSS-driven (compile-time `$deck-*`
+  tokens, not runtime `var(--brand-*)`), so a brand file would have no
+  effect.
+- **The deck ships without a logo.** Removed the `logo:` key from the
+  deck format (`_extensions/epitemplates-deck/_extension.yml`), and the
+  deck brand carries no logo slot. The source decks carry no persistent
+  mark and the fixed stage has no room for one. An author who wants a
+  logo can still add `logo: img/…` to their own deck YAML (still guarded
+  by `validate-logo.lua`). Authoring docs now tell deck authors to set
+  `brand: false` so the report's project-wide brand (logo + navy) does
+  not bleed into their slides.
+
 ### Fixed
 - **RevealJS styling reconnected.** `css/epicentre_revealjs_style.scss`
   was orphaned — the `revealjs` format had no `theme:` key, so the

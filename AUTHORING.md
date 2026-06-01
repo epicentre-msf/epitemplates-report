@@ -9,6 +9,11 @@ and the full vocabulary a deck is built from.
 Everything here renders from plain Quarto Markdown with
 `format: epitemplates-deck-revealjs` — no raw HTML required.
 
+Add `brand: false` to your deck's front matter. The deck carries its own brand
+(teal/coral, no logo) and styles itself; `brand: false` stops the co-shipped
+report extension's project-wide brand from bleeding in and recolouring your
+slides navy (or injecting the report logo).
+
 ---
 
 ## A gotcha to know first: don't start a card with a heading
@@ -245,9 +250,12 @@ $deck-accent:  $deck-coral-500;
 ```
 
 The raw palette those names resolve to (`$deck-teal-*`, `$deck-coral-*`,
-`$col-*`) lives one level up in
-`_extensions/epitemplates-report/css/_brand.scss` — edit there only if you need a
-brand-wide change across **all** the report formats, not just the deck.
+`$col-primary`) lives in the deck's own
+`_extensions/epitemplates-deck/css/_brand.scss` — the single source of truth
+for the deck colours; edit there for a deck-wide change. The deck has its
+**own** palette, fully independent of the report's
+(`_extensions/epitemplates-report/css/_brand.scss`); changing one never touches
+the other.
 
 > After any token change, re-render the deck (`quarto render … --to
 > epitemplates-deck-revealjs`) — SCSS is compiled at render time.

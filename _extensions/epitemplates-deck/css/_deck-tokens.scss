@@ -2,7 +2,7 @@
 // Component SCSS reads ONLY these semantic names ($deck-primary,
 // $deck-accent, …), never a raw hex, so flipping the binding here
 // reskins the whole deck. The raw $deck-* / $col-* palettes come
-// from epitemplates-report/css/_brand.scss (imported by the theme
+// from this extension's own css/_brand.scss (imported by the theme
 // before this file). See deck-format-implementation-plan.md §0 + §1.
 
 /* Tier A — deck-faithful (DEFAULT): teal primary + coral accent. */

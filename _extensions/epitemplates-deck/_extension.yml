@@ -38,10 +38,10 @@ contributes:
       transition: none
       navigation-mode: linear
       overview: true
-      # Root-relative, like epitemplates-report: ships via the template's
-      # repo-root img/ (B1 prep note — not the plan's ../epitemplates-report
-      # path). Guarded by validate-logo.lua below.
-      logo: img/epicentre_msf_logo_transparent.png
+      # No logo: the deck ships without one by design (the source decks
+      # carry none, and the fixed stage has no room for a persistent mark).
+      # An author who wants a mark can still add `logo: img/…` to their deck's
+      # YAML; validate-logo.lua below guards that opt-in value.
       embed-resources: true
       # On-screen Fullscreen + Agenda controls (reveal natives F / ☰ menu, made
       # visible per B8 review #5). Self-contained HTML+JS, hidden in print.

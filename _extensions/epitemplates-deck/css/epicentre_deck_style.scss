@@ -8,9 +8,10 @@
 // the switch-bearing hues. See deck-format-implementation-plan.md §3
 // (canvas) + §4 (theme). Lua components (deck-grid, shortcodes) in B5/B6.
 
-// Plan A (confirmed B0/B1): the brand palette resolves on disk via the
-// cross-extension relative import — $col-* + the additive $deck-* block.
-@import "../../epitemplates-report/css/brand";
+// The deck owns its palette (css/_brand.scss) — no cross-extension import,
+// so the deck and report extensions are independent. $col-* + the $deck-*
+// block both live there.
+@import "brand";
 // Semantic deck tokens: $deck-primary, $deck-accent, $deck-bg, $deck-fg.
 @import "deck-tokens";
 
