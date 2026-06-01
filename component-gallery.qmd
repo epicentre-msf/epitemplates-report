@@ -1,5 +1,5 @@
 ---
-title: "epitemplates-deck"
+title: "Epitemplates deck [demo]{.tgold}"
 subtitle: "Component gallery — every class & shortcode the format ships"
 author: "Epicentre"
 date: today
@@ -20,7 +20,67 @@ footer: "Epicentre · epitemplates-deck gallery"
 brand: false
 ---
 
-## Header rhythm {.smaller}
+## Contents {#sec-contents}
+
+{{< eyebrow "Component gallery · click a card to jump to a section" >}}
+
+:::{.cards}
+:::{.card .top-accent link="#sec-header"}
+**Header & rhythm**
+
+Eyebrow, slide title, subtitle, footer + counter.
+:::
+
+:::{.card .top-accent link="#sec-cards"}
+**Cards & accents**
+
+Top / left accent borders, hover lift, plain surfaces.
+:::
+
+:::{.card .top-accent link="#sec-stats"}
+**Stats & numbers**
+
+Stat cards, big number + superscript, the rich stat well.
+:::
+
+:::{.card .top-accent link="#sec-grid"}
+**Layout grid**
+
+The signature `.deck-grid` arbitrary-column row.
+:::
+
+:::{.card .top-accent link="#sec-callouts"}
+**Callouts & chips**
+
+Key / warning boxes, the before→after delta, chips.
+:::
+
+:::{.card .top-accent link="#sec-code"}
+**Code blocks**
+
+Dark default + light variant, two-column split, `.mono`.
+:::
+
+:::{.card .top-accent link="#sec-heatmap"}
+**Heatmap**
+
+CSS-grid coverage matrix.
+:::
+
+:::{.card .top-accent link="#sec-icons"}
+**Icon registry**
+
+Offline Bootstrap Icons, `currentColor`-tinted.
+:::
+
+:::{.card .top-accent link="#sec-tier"}
+**Colour & Tier switch**
+
+Re-skin the whole deck from one file.
+:::
+:::
+
+## Header rhythm {#sec-header .smaller}
 
 {{< eyebrow "Eyebrow · slide title · subtitle" >}}
 
@@ -57,7 +117,7 @@ tracker rail showing which part you are entering.
 :::
 ::::
 
-## Cards & accents
+## Cards & accents {#sec-cards}
 
 {{< eyebrow "Native .cards grid + accent borders" >}}
 
@@ -86,7 +146,7 @@ border.
 :::
 :::
 
-## Stat cards — two authoring paths
+## Stat cards — two authoring paths {#sec-stats}
 
 {{< eyebrow "Shortcode (draws the icon) vs Div filter (defers it)" >}}
 
@@ -125,7 +185,7 @@ Of records ingested, cleaned, and validated against the schema.
 :::
 :::
 
-## The signature row — `.deck-grid`
+## The signature row — `.deck-grid` {#sec-grid}
 
 {{< eyebrow "Arbitrary columns in one clean attribute" >}}
 
@@ -167,10 +227,10 @@ The `deck-layout.lua` filter turns `cols="…"` into a real CSS grid
 
 :::{.cards}
 :::{.card .photo}
-<div class="media" style="background-image:linear-gradient(135deg,#0E7A7A 0%,#159C9C 60%,#A8DCD9 100%)"></div>
+<div class="media" style="background:#2E4473"></div>
 
 :::{.body}
-### Field data collection
+<h3>Field data collection</h3>
 
 Community health workers entering case data on tablets in the field.
 
@@ -181,10 +241,12 @@ Community health workers entering case data on tablets in the field.
 :::
 :::
 
-The `.media` carries a `background-image` (here a gradient stand-in for a
-photo); the SCSS adds the bottom scrim. `.meta .country` is coral.
+The `.media` carries a `background` (here a flat colour stand-in for a photo —
+swap in a real `url(...)`). `.meta .country` is the accent colour.
+The headline is a raw `<h3>` (not a Markdown `###`) so it stays inside the card
+instead of being promoted into its own empty slide.
 
-## Callout boxes
+## Callout boxes {#sec-callouts}
 
 {{< eyebrow "Two tinted boxes for the read-this moments" >}}
 
@@ -226,7 +288,7 @@ A `.card.delta` with three inline spans: `.from` is the old value (muted),
 `{{< chip "label" >}}` outlines in teal; add `solid` for a filled teal
 pill, `accent` for a coral outline.
 
-## Code & two-column split
+## Code & two-column split {#sec-code}
 
 {{< eyebrow "Native .columns + dark code, no hand-tokenizing" >}}
 
@@ -289,7 +351,7 @@ Recolour the whole deck from one line.
 Any `.card` gains click-navigation with `link="#id"`. Link to a section's
 explicit `{#id}` (rewording- and reorder-proof), never a slide number.
 
-## Heatmap
+## Heatmap {#sec-heatmap}
 
 {{< eyebrow "CSS-grid coverage matrix (optional component)" >}}
 
@@ -356,13 +418,13 @@ Every glyph inherits the surrounding text colour, so a teal chip or a coral
 stat tints it automatically. Add one by pasting a Bootstrap Icons path into
 the registry table.
 
-## Title decoration — `{{< dots >}}`
+## Title decoration — `{{</* dots */>}}`
 
 {{< eyebrow "Precomputed deterministic scatter" >}}
 
 {{< dots >}}
 
-The `{{< dots >}}` shortcode emits a fixed-seed SVG scatter (44 circles,
+The ``{{</* dots */>}}`` shortcode emits a fixed-seed SVG scatter (44 circles,
 byte-identical every render) — the decorative figure the source decks
 generated at runtime, recovered with no JS and no network.
 

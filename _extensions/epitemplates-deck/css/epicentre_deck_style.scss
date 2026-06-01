@@ -309,11 +309,16 @@ body.quarto-light {
 // painted by a fixed ::before that fills the transformed 1920×1080 stage
 // (the section box alone would not reach the edges); content sits centered
 // on top. The Tier switch flows through because the colour is $deck-primary.
-// The shared full-bleed decoration: $deck-primary fill + faint teal-200
-// concentric rings (right) + a gold rule top and bottom (inset 120px). One SVG
-// data-URI so dividers + the title slide read like the source decks' section
-// pages. Painted by a fixed ::before that fills the transformed 1920×1080 stage.
-$deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201080'%20preserveAspectRatio='xMidYMid%20slice'%3E%3Cg%20transform='translate%281480%20540%29'%20fill='none'%20stroke='%23A8DCD9'%20stroke-width='1.1'%3E%3Ccircle%20r='700'%20opacity='.05'/%3E%3Ccircle%20r='560'%20opacity='.07'/%3E%3Ccircle%20r='400'%20opacity='.10'/%3E%3Ccircle%20r='250'%20opacity='.14'/%3E%3Ccircle%20r='130'%20opacity='.18'/%3E%3C/g%3E%3Crect%20x='120'%20y='100'%20width='1680'%20height='5'%20fill='%23FCD34D'/%3E%3Crect%20x='120'%20y='975'%20width='1680'%20height='5'%20fill='%23FCD34D'/%3E%3C/svg%3E");
+// Plain full-bleed slide: solid $deck-primary with just a thin rule top and
+// bottom (inset 120px) in $deck-divider-accent — no dots, no pattern. One SVG
+// data-URI, painted by a fixed ::before that fills the 1920×1080 stage.
+//
+// The rule colour is parametrised from $deck-divider-accent: SVG data-URIs
+// can't read CSS vars, but this is compiled SCSS, so we interpolate the token.
+// A hex (`#ffea2f`) must be URL-encoded as `%23ffea2f`, so we drop the leading
+// `#` via str-slice and prepend `%23`. NOTE: set $deck-divider-accent to a HEX
+// value (not a CSS colour keyword) so the interpolation yields hex digits.
+$deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201080'%20preserveAspectRatio='xMidYMid%20slice'%3E%3Crect%20x='120'%20y='100'%20width='1680'%20height='5'%20fill='%23#{str-slice("#{$deck-divider-accent}", 2)}'/%3E%3Crect%20x='120'%20y='975'%20width='1680'%20height='5'%20fill='%23#{str-slice("#{$deck-divider-accent}", 2)}'/%3E%3C/svg%3E");
 
 .reveal .slides section.divider {
   // `!important` beats reveal's `.slides > section.present { display:block }`,
@@ -334,7 +339,9 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: $deck-primary $deck-divider-art center / cover no-repeat;
+  // Solid navy full-bleed slide (no gradient), with the faint white epi-curve
+  // dots + amber rules layered on top.
+  background: $deck-divider-art center / cover no-repeat, $deck-primary;
 }
 
 // Eyebrow → gold mono kicker, lifted ABOVE the title (source order). The
@@ -639,6 +646,7 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   flex-direction: column;
   overflow: hidden;
   padding: 26px 30px;
+  border-radius: 10px;
   background: #fff;
   border: 1px solid $deck-line;
   color: $deck-ink-2;
@@ -673,7 +681,7 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
 .reveal .card:hover {
   transform: translateY(-3px);
   border-color: $deck-coral-300;
-  box-shadow: 0 14px 30px rgba(10, 46, 46, 0.12);
+  box-shadow: 0 14px 30px rgba(46, 68, 115, 0.16);
 }
 
 // Vertical rhythm between cards stacked in NORMAL FLOW — columns, the slide
@@ -730,8 +738,8 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: $deck-teal-200;
-  background: rgba(6, 27, 27, 0.85);
+  color: #fff;
+  background: rgba(46, 68, 115, 0.92);
 }
 
 // Stat card: kicker + big number + descriptor + viz well.
@@ -789,16 +797,7 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   background-size: cover;
 }
 
-.reveal .card.photo .media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 40%,
-    rgba(6, 27, 27, 0.55) 100%
-  );
-}
+// (No scrim: the media banner is a flat colour fill — no gradients anywhere.)
 
 .reveal .card.photo .body {
   display: flex;
@@ -878,6 +877,7 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   // frame header already supplies the gap.
   margin: 32px 0 18px 0;
   padding: 28px 34px;
+  border-radius: 10px;
   font-size: 26px;
   line-height: 1.55;
   color: $deck-ink;
@@ -973,27 +973,45 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   color: $deck-accent;
 }
 
+// ─── Inline code (B10) ────────────────────────────────────────────────
+// `like this` → a bare <code> in running text. It is NOT inside a <pre>, so
+// the block-code rules below don't reach it (`:not(pre) > code`). Matches the
+// report's inline code: primary-coloured text on a pale tint, rounded. Both
+// colours are parametrised via $deck-inline-code / $deck-inline-code-bg.
+.reveal :not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 5px;
+  background: $deck-inline-code-bg;
+  color: $deck-inline-code;
+  font-family: $font-family-monospace;
+  font-size: 0.92em;
+}
+
 // ─── Code blocks (B4, plan §4, Gap #4) ────────────────────────────────
 // Authors write a normal fenced ```r``` block; Quarto/Pandoc emit
 // skylighting token spans (.kw/.dt/.st/.co/.fu/.dv … confirmed in B0). We
-// paint the source decks' dark code surface and remap those token classes
-// to the deck syntax palette — NO hand-tokenizing. The syntax hues are the
-// decks' fixed dark scheme (raw $deck-* palette, like B3's $deck-mute);
-// the one switch-aware hue is keywords → $deck-accent.
+// paint a LIGHT code surface like the report's code blocks (pale-blue fill,
+// soft border) and remap those token classes to the report palette — NO
+// hand-tokenizing: keywords/control → navy primary, strings/datatypes →
+// blue accent, numbers/functions → mid blue, comments → muted grey italic.
 .reveal div.sourceCode,
 .reveal pre,
 .reveal .code-block {
   width: 100%;
   margin: 0 0 20px 0;
   background: $deck-code-bg;
-  border-radius: 4px;
+  border: 1px solid $deck-line;
+  border-radius: 6px;
   box-shadow: none;
+  overflow: hidden;
 }
 
 .reveal pre,
 .reveal .code-block {
   padding: 36px 40px;
-  overflow: auto;
+  // No scrollbars on slide code: long lines wrap (white-space below) instead of
+  // overflowing, and any residual overflow is clipped rather than scrolled.
+  overflow: hidden;
 }
 
 .reveal div.sourceCode > pre {
@@ -1009,40 +1027,42 @@ $deck-divider-art: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/200
   font-family: $font-family-monospace;
   font-size: 22px;
   line-height: 1.55;
-  color: $deck-teal-100;
-  white-space: pre;
+  color: $deck-ink;
+  // Wrap long lines instead of scrolling, and override reveal.js's default
+  // `.reveal pre code { overflow:auto; word-wrap:normal }` (the source of the
+  // horizontal scrollbar) so no scrollbar appears on the inner <code>.
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  overflow: hidden;
   background: transparent;
 }
 
-// Skylighting token remap → deck syntax palette:
-//   keyword / control-flow / constant·boolean / attribute·decorator → accent
-//   string / char / datatype                                        → coral-300
-//   number (dec / base-N / float)                                   → coral-100
-//   function / built-in                                             → teal-200
+// Skylighting token remap → report palette (dark-on-light):
+//   keyword / control-flow / constant·boolean / attribute·decorator → navy
+//   string / char / datatype                                        → green accent
+//   number (dec / base-N / float) / function / built-in             → mid blue
 //   comment / docstring                                             → mute italic
 .reveal code span.kw,
 .reveal code span.cf,
 .reveal code span.cn,
 .reveal code span.at {
-  color: $deck-accent;
+  color: $deck-primary;
 }
 
 .reveal code span.st,
 .reveal code span.ch,
 .reveal code span.vs,
 .reveal code span.dt {
-  color: $deck-coral-300;
+  color: $deck-accent;
 }
 
 .reveal code span.dv,
 .reveal code span.bn,
-.reveal code span.fl {
-  color: $deck-coral-100;
-}
-
+.reveal code span.fl,
 .reveal code span.fu,
 .reveal code span.bu {
-  color: $deck-teal-200;
+  color: $deck-teal-500;
 }
 
 .reveal code span.co,

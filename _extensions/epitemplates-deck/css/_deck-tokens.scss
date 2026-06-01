@@ -5,23 +5,32 @@
 // from this extension's own css/_brand.scss (imported by the theme
 // before this file). See deck-format-implementation-plan.md §0 + §1.
 
-/* Tier A — deck-faithful (DEFAULT): teal primary + coral accent. */
+/* Tier A — report-aligned (DEFAULT): navy primary + blue accent, matching
+   the epitemplates-report design language (an all-navy/blue identity — the
+   Epicentre palette has no green). */
 $deck-primary: $deck-teal-700;
 $deck-accent: $deck-coral-500;
 $deck-bg: $deck-paper;
 $deck-fg: $deck-ink;
 
-/* Callout tints (B10). `key` rides the teal scale; `warn` is the source decks'
-   amber highlight — a deck-only hue (not in the brand palette, like coral). */
+/* Callout tints. `key` maps to the report's NOTE callout (navy left rule +
+   pale-blue fill, straight from the palette); `warn` maps to the report's
+   CAUTION callout (amber rule + pale-yellow fill = report warning / yellow-sec). */
 $deck-key-bg: $deck-teal-100;
 $deck-key-line: $deck-primary;
-$deck-warn-bg: #fef3c7;
-$deck-warn-line: #f59e0b;
+$deck-warn-bg: #FEF6E7; // report yellow-sec
+$deck-warn-line: #f5f0bc; // report warning
 
-/* Divider / title accent — the source decks' special-slide gold (distinct from
-   the content-slide coral). One token: flip it to reskin every full-bleed slide
-   (e.g. to $deck-accent for a coral identity). */
-$deck-divider-accent: #fcd34d;
+/* Divider / title accent — the report's warm amber (its `warning` hue), used
+   for the special-slide kicker / numeral / rules against the solid navy
+   divider background. One token: flip it to reskin every full-bleed slide. */
+$deck-divider-accent: #ffea2f;
+
+/* Inline code (`like this`) — like the report: primary-coloured text on a pale
+   tint. Both are parametrised here; change them to recolour inline code only
+   (block/fenced code is the dark-on-light syntax theme, separate). */
+$deck-inline-code: $deck-primary; // text colour (navy)
+$deck-inline-code-bg: $deck-teal-100; // background (pale blue)
 
 /* Light code block (B10, PL-4). The source decks' slides 12-13 use a cream
    `.code-block.light` surface with dark-ink syntax; an author opts in per block

@@ -1,0 +1,19 @@
+@charset "UTF-8";
+/* --- Deck palette — aligned to the epitemplates-report design language --- */
+/* The deck reproduces the report's brand identity (navy primary, light-blue
+   secondary, pale-blue surfaces, a green accent that echoes the report's
+   green→blue slide gradient) while staying its own self-contained extension.
+   The token NAMES are historical (a teal/coral scale); the VALUES now carry
+   the report's navy/blue/green hues. Component SCSS reads these via the
+   semantic $deck-primary / $deck-accent / … tokens in _deck-tokens.scss,
+   so the whole deck re-skins from this one file.
+   Report sources: _extensions/epitemplates-report/css/_brand.scss + brand.yml. */
+/* Primary scale — the report navy and its tints (was a teal ramp). */
+/* Accent scale — a brighter blue from the Epicentre navy family (the brand has
+   no green), so the deck's accent touches stay on-brand against the navy. */
+/* --- Brand-aligned option (Tier B) ------------------------------------- */
+/* Epicentre navy, kept here so the commented Tier-B binding in
+   _deck-tokens.scss ($deck-primary: $col-primary) still compiles if an
+   author flips to the brand-aligned identity. Matches the report brand's
+   primary; if you re-skin the deck to a different house colour, change it
+   here. */

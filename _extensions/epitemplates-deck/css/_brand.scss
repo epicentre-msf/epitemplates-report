@@ -13,25 +13,36 @@
 // `var(--brand-*)`), and decks render with brand processing off, so a
 // brand.yml would have zero effect. Edit colours HERE.
 
-/* --- Deck palette ------------------------------------------------------ */
-/* The deck's own design-system hues. Component SCSS reads these via the
+/* --- Deck palette — aligned to the epitemplates-report design language --- */
+/* The deck reproduces the report's brand identity (navy primary, light-blue
+   secondary, pale-blue surfaces, a green accent that echoes the report's
+   green→blue slide gradient) while staying its own self-contained extension.
+   The token NAMES are historical (a teal/coral scale); the VALUES now carry
+   the report's navy/blue/green hues. Component SCSS reads these via the
    semantic $deck-primary / $deck-accent / … tokens in _deck-tokens.scss,
-   never a raw hex, so the Tier-A/Tier-B switch there reskins the deck. */
-$deck-teal-900: #0A2E2E;
-$deck-teal-700: #0E7A7A;
-$deck-teal-500: #159C9C;
-$deck-teal-200: #A8DCD9;
-$deck-teal-100: #E6F5F5;
-$deck-coral-500: #F06E58;
-$deck-coral-300: #FCA87A;
-$deck-coral-100: #FCE8D9;
-$deck-ink: #0A2E2E;
-$deck-ink-2: #1A4545;
-$deck-paper: #FBFBF7;
-$deck-paper-2: #F4F2EA;
-$deck-line: #CDD6D6;
-$deck-mute: #667878;
-$deck-code-bg: #071E1E;
+   so the whole deck re-skins from this one file.
+   Report sources: _extensions/epitemplates-report/css/_brand.scss + brand.yml. */
+
+/* Primary scale — the report navy and its tints (was a teal ramp). */
+$deck-teal-900: #1B2A47; // darkest navy — letterbox/pillarbox surround
+$deck-teal-700: #2E4473; // PRIMARY — report navy ($col-primary)
+$deck-teal-500: #3D5A8A; // mid navy-blue
+$deck-teal-200: #A1B8CF; // report secondary (light blue)
+$deck-teal-100: #E4EDF3; // report primary-light (pale blue surface)
+
+/* Accent scale — a brighter blue from the Epicentre navy family (the brand has
+   no green), so the deck's accent touches stay on-brand against the navy. */
+$deck-coral-500: #4F74B2; // ACCENT — mid-bright Epicentre blue
+$deck-coral-300: #80A0CE; // lighter blue (string tokens, card hover)
+$deck-coral-100: #DAE3F1; // pale blue tint
+
+$deck-ink: #22324F; // headings / strong text — deep navy ink
+$deck-ink-2: #3E4658; // body copy — dark slate
+$deck-paper: #ffffff; // slide canvas — report secondary-bg (white cards pop on it)
+$deck-paper-2: #f1f5f7; // secondary pale surface (empty heatmap cells)
+$deck-line: #CFDBE6; // hairlines / card borders — soft blue-grey
+$deck-mute: #6B7A90; // muted — footer, counter, captions
+$deck-code-bg: #ECF2F8; // code surface — light, like the report's code blocks
 
 /* --- Brand-aligned option (Tier B) ------------------------------------- */
 /* Epicentre navy, kept here so the commented Tier-B binding in
